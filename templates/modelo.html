@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    {% block head %}
+        <link rel="stylesheet" href="{{ url_for('static', filename='bootstrap-4.3.1/css/bootstrap.min.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='fontawesome-free-5.10.2/css/all.min.css') }}">
+        <title>{% block title %}Home{% endblock %} - Projeto Final</title>
+        <style>
+        footer {
+            border-top: 2px solid black;
+        }
+        </style>
+    {% endblock %}
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <a class="navbar-brand" href="{{ url_for('home.home') }}">Projeto final</a>
+    <ul class="navbar-nav mr-auto">
+        <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('home.home') }}"><i class="fas fa-home"></i> Home</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href=""><i class="fas fa-users"></i> Clientes</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href=""><i class="fas fa-pizza-slice"></i> Produtos</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('pedido.lista') }}"><i class="fas fa-arrow-down"></i> Pedidos</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href=""><i class="fas fa-sign-out-alt"></i> Sair</a>
+        </li>
+    </ul>
+</nav>
+<div class="container mt-5">
+    {% block content %}{% endblock %}
+</div>
+{% block footer %}
+    <div class="container-fluid mt-5">
+        <footer>
+            &copy; Copyright 2019 by <a href="{{ url_for('home.home') }}">Projeto final</a>.
+        </footer>
+    </div>
+{% endblock %}
+<script src="{{ url_for('static', filename='bootstrap-4.3.1/js/bootstrap.min.js') }}"></script>
+</body>
+</html>
