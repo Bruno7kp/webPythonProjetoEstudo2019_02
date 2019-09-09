@@ -1,0 +1,49 @@
+{% extends "modelo.html" %}
+
+{% block title %}Produto{% endblock %}
+
+{% block content %}
+    <h1>Produto</h1>
+    <form action="">
+        <div class="row mt-3">
+            <div class="col col-3">
+                <div class="form-group">
+                    <label for="codigo">Código</label>
+                    <input id="codigo" type="text" class="form-control" disabled>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col col-6">
+                <div class="form-group">
+                    <label for="descricao">Descrição</label>
+                    <input id="descricao" type="text" class="form-control">
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col col-6">
+                <div class="form-group">
+                    <label for="valor">Valor</label>
+                    <input id="valor" type="text" class="form-control">
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col col-6">
+                <div class="form-group">
+                    <label for="imagem">Imagem</label>
+                    <input id="imagem" type="file" class="form-control">
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col col-12">
+                <div class="form-group">
+                    <button class="btn btn-success"><i class="fa fa-save"></i> Salvar</button>
+                    <button class="btn btn-danger"><i class="fa fa-trash"></i> Excluir</button>
+                </div>
+            </div>
+        </div>
+    </form>
+{% endblock %}
