@@ -3,25 +3,27 @@
 {% block title %}Produtos{% endblock %}
 
 {% block content %}
-    <a class="btn btn-danger" href="{{ url_for("produto.formulario") }}"><i class="fas fa-plus-circle"></i> Novo produto</a>
-    <div class="row mt-3">
-        <div class="col col-8">
-            <table class="table table-bordered">
-                <tr>
-                    <th>#</th>
-                    <th>Descrição</th>
-                    <th>Preço</th>
-                    <th>Imagem</th>
-                    <th></th>
-                </tr>
-                <tr>
-                    <td>1</td>
-                    <td>Teste</td>
-                    <td>10,90</td>
-                    <td></td>
-                    <td><a href="{{ url_for("produto.formulario") }}" class="btn btn-light"><i class="fa fa-edit"></i></a></td>
-                </tr>
-            </table>
+    <div class="container mt-5">
+        <a class="btn btn-danger" href="{{ url_for("produto.formulario") }}"><i class="fas fa-plus-circle"></i> Novo produto</a>
+        <div class="row mt-3">
+            <div class="col col-8">
+                <table class="table table-bordered">
+                    <tr>
+                        <th>#</th>
+                        <th>Descrição</th>
+                        <th>Preço</th>
+                        <th>Imagem</th>
+                        <th></th>
+                    </tr>
+                    <tr>
+                        <td>1</td>
+                        <td>Teste</td>
+                        <td>10,90</td>
+                        <td></td>
+                        <td><a href="{{ url_for("produto.formulario") }}" class="btn btn-light"><i class="fa fa-edit"></i></a></td>
+                    </tr>
+                </table>
+            </div>
         </div>
     </div>
 {% endblock %}

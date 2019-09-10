@@ -7,6 +7,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     {% block head %}
         <link rel="stylesheet" href="{{ url_for('static', filename='bootstrap-4.3.1/css/bootstrap.min.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/custom.css') }}">
         <link rel="stylesheet" href="{{ url_for('static', filename='fontawesome-free-5.10.2/css/all.min.css') }}">
         <title>{% block title %}Home{% endblock %} - Projeto Final</title>
         <style>
@@ -17,6 +18,7 @@
     {% endblock %}
 </head>
 <body>
+{% block menu %}
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <a class="navbar-brand" href="{{ url_for('home.home') }}">Projeto final</a>
     <ul class="navbar-nav mr-auto">
@@ -33,13 +35,12 @@
             <a class="nav-link" href="{{ url_for('pedido.lista') }}"><i class="fas fa-arrow-down"></i> Pedidos</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="{{ url_for('home.home') }}"><i class="fas fa-sign-out-alt"></i> Sair</a>
+            <a class="nav-link" href="{{ url_for('login.sair') }}"><i class="fas fa-sign-out-alt"></i> Sair</a>
         </li>
     </ul>
 </nav>
-<div class="container mt-5">
-    {% block content %}{% endblock %}
-</div>
+{% endblock %}
+{% block content %}{% endblock %}
 {% block footer %}
     <div class="container-fluid mt-5">
         <footer>
@@ -47,6 +48,8 @@
         </footer>
     </div>
 {% endblock %}
+{% block scripts %}
 <script src="{{ url_for('static', filename='bootstrap-4.3.1/js/bootstrap.min.js') }}"></script>
+{% endblock %}
 </body>
 </html>
