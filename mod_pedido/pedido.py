@@ -8,7 +8,7 @@ bp_pedido = Blueprint('pedido', __name__, url_prefix='/', template_folder='templ
 @bp_pedido.route("/pedidos")
 @logado
 def lista():
-    return render_template("formListaPedidos.html"), 200
+    return render_template("formListaPedidos.html")
 
 
 @bp_pedido.route("/pedido")
@@ -19,4 +19,4 @@ def formulario(pedidoid=None):
         add = True  # Cadastro de novo pedido
     else:
         add = False  # Editar pedido
-    return render_template("formPedido.html"), 200
+    return render_template("formPedido.html")

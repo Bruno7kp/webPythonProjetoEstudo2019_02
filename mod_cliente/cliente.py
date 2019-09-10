@@ -8,7 +8,7 @@ bp_cliente = Blueprint('cliente', __name__, url_prefix='/', template_folder='tem
 @bp_cliente.route("/clientes")
 @logado
 def lista():
-    return render_template("formListaClientes.html"), 200
+    return render_template("formListaClientes.html")
 
 
 @bp_cliente.route("/cliente")
@@ -19,4 +19,4 @@ def formulario(clienteid=None):
         add = True  # Cadastro de novo cliente
     else:
         add = False  # Editar cliente
-    return render_template("formCliente.html"), 200
+    return render_template("formCliente.html")
