@@ -14,6 +14,9 @@
         footer {
             border-top: 2px solid black;
         }
+        .time {
+            color: white;
+        }
         </style>
     {% endblock %}
 </head>
@@ -38,6 +41,7 @@
             <a class="nav-link" href="{{ url_for('login.sair') }}"><i class="fas fa-sign-out-alt"></i> Sair</a>
         </li>
     </ul>
+    <div class="time">Sessão <span id="time-counter"></span></div>
 </nav>
 {% endblock %}
 {% block content %}{% endblock %}
@@ -50,6 +54,35 @@
 {% endblock %}
 {% block scripts %}
 <script src="{{ url_for('static', filename='bootstrap-4.3.1/js/bootstrap.min.js') }}"></script>
+<script>
+    let loggedSince = 0;
+    {% if 'time' in session %}
+    loggedSince = {{ session['time'] }};
+    {% endif %}
+    let counterEl = document.querySelector('#time-counter');
+    if (loggedSince > 0 && counterEl != null) {
+        setInterval(() => {
+            let now = new Date().getTime() / 1000;
+            let diffSeconds = Math.floor(now - loggedSince);
+            let diffMinutes = Math.floor(diffSeconds / 60);
+            diffSeconds = diffSeconds % 60;
+            let diffHours = Math.floor(diffMinutes / 60);
+            diffMinutes = diffMinutes % 60;
+            let diffDays = Math.floor(diffHours / 24);
+            diffHours = diffHours % 24;
+            let clock = "";
+            clock += (diffHours > 9) ? diffHours : "0" + diffHours;
+            clock += ":";
+            clock += (diffMinutes > 9) ? diffMinutes : "0" + diffMinutes;
+            clock += ":";
+            clock += (diffSeconds > 9) ? diffSeconds : "0" + diffSeconds;
+            counterEl.innerText = clock;
+            if (diffMinutes >= 30) {
+                window.location = "{{ url_for('login.entrar', erro=2) }}";
+            }
+        }, 1000);
+    }
+</script>
 {% endblock %}
 </body>
 </html>

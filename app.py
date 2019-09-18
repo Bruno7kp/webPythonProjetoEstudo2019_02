@@ -1,5 +1,7 @@
 # coding: utf-8
-from flask import Flask, redirect, request, url_for, session
+from datetime import timedelta
+
+from flask import Flask, redirect, url_for
 from mod_home.home import bp_home
 from mod_pedido.pedido import bp_pedido
 from mod_erro.erro import bp_erro
@@ -11,6 +13,7 @@ from mod_login.login import bp_login
 app = Flask(__name__)
 
 app.secret_key = b'_8#y2P"g8l1x\n\xec]/'
+app.permanent_session_lifetime = timedelta(minutes=30)
 
 app.register_blueprint(bp_home)
 app.register_blueprint(bp_pedido)
