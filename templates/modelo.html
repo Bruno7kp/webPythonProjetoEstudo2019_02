@@ -56,6 +56,7 @@
 <script src="{{ url_for('static', filename='bootstrap-4.3.1/js/bootstrap.min.js') }}"></script>
 <script>
     let loggedSince = 0;
+    let minutesLimit = {{ session_limit }};
     {% if 'time' in session %}
     loggedSince = {{ session['time'] }};
     {% endif %}
@@ -77,7 +78,7 @@
             clock += ":";
             clock += (diffSeconds > 9) ? diffSeconds : "0" + diffSeconds;
             counterEl.innerText = clock;
-            if (diffMinutes >= 30) {
+            if (diffMinutes >= minutesLimit) {
                 window.location = "{{ url_for('login.entrar', erro=2) }}";
             }
         }, 1000);
