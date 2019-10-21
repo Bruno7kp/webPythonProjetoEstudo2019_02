@@ -1,8 +1,8 @@
 from typing import List
-from model import BaseModel
+from model.base import BaseModel
 
 
-class Cliente(BaseModel):
+class ClienteModel(BaseModel):
     def __init__(self, id_cliente=0, nome="", endereco="", numero=0, observacao="", cep="", bairro="", cidade="",
                  estado="", telefone="", email="", login="", senha="", grupo=""):
         super().__init__()
@@ -78,9 +78,9 @@ class Cliente(BaseModel):
         c = self.db.con.cursor()
         c.execute("""SELECT id_cliente, nome, endereco, numero, observacao, cep, bairro, cidade, estado, telefone,
          email, login, senha, grupo FROM tb_clientes ORDER BY nome""")
-        list_all: List[Cliente] = []
+        list_all: List[ClienteModel] = []
         for (row, key) in c:
-            list_all[key] = Cliente()
+            list_all[key] = ClienteModel()
             list_all[key].id_cliente = row[0]
             list_all[key].nome = row[1]
             list_all[key].endereco = row[2]

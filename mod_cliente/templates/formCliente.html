@@ -5,30 +5,30 @@
 {% block content %}
     <div class="container mt-5">
         <h1>Cliente</h1>
-        <form action="">
+        <form action="{{ url_for('cliente.cadastro') }}" method="post">
             <div class="row mt-3">
-                <div class="col col-6">
+                <div class="col col-3">
                     <div class="form-group">
                         <label for="codigo">Código</label>
-                        <input id="codigo" type="text" class="form-control" disabled>
+                        <input id="codigo" name="codigo" type="text" class="form-control" disabled>
                     </div>
                 </div>
-                <div class="col col-6">
+                <div class="col col-9">
                     <div class="form-group">
                         <label for="nome">Nome do Cliente</label>
-                        <input id="nome" type="text" class="form-control">
+                        <input id="nome" name="nome" type="text" class="form-control">
                     </div>
                 </div>
-                <div class="col col-6">
+                <div class="col col-9">
                     <div class="form-group">
                         <label for="endereco">Endereço</label>
-                        <input id="endereco" type="text" class="form-control">
+                        <input id="endereco" name="endereco" type="text" class="form-control">
                     </div>
                 </div>
-                <div class="col col-6">
+                <div class="col col-3">
                     <div class="form-group">
                         <label for="numero">Número</label>
-                        <input id="numero" type="text" class="form-control">
+                        <input id="numero" name="numero" type="text" class="form-control">
                     </div>
                 </div>
             </div>
@@ -36,54 +36,74 @@
                 <div class="col col-12">
                     <div class="form-group">
                         <label for="observacao">Observação</label>
-                        <input id="observacao" type="text" class="form-control">
+                        <input id="observacao" name="observacao" type="text" class="form-control">
                     </div>
                 </div>
                 <div class="col col-2">
                     <div class="form-group">
                         <label for="cep">CEP</label>
-                        <input id="cep" type="text" class="form-control">
+                        <input id="cep" name="cep" type="text" class="form-control">
                     </div>
                 </div>
                 <div class="col col-3">
                     <div class="form-group">
                         <label for="bairro">Bairro</label>
-                        <input id="bairro" type="text" class="form-control">
+                        <input id="bairro" name="bairro" type="text" class="form-control">
                     </div>
                 </div>
                 <div class="col col-3">
                     <div class="form-group">
                         <label for="cidade">Cidade</label>
-                        <input id="cidade" type="text" class="form-control">
+                        <input id="cidade" name="cidade" type="text" class="form-control">
                     </div>
                 </div>
                 <div class="col col-4">
                     <div class="form-group">
                         <label for="estado">Estado</label>
-                        <select name="estado" id="estado" class="form-control">
+                        <select id="estado" name="estado" class="form-control">
                             <option value="SC">Santa Catarina</option>
                         </select>
                     </div>
                 </div>
             </div>
             <div class="row">
-                <div class="col col-6">
+                <div class="col col-3">
                     <div class="form-group">
                         <label for="telefone">Telefone</label>
-                        <input id="telefone" type="text" class="form-control">
+                        <input id="telefone" name="telefone" type="text" class="form-control">
                     </div>
                 </div>
-                <div class="col col-6">
+                <div class="col col-3">
                     <div class="form-group">
                         <label for="email">E-mail</label>
-                        <input id="email" type="text" class="form-control">
+                        <input id="email" name="email" type="text" class="form-control">
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col col-3">
+                    <div class="form-group">
+                        <label for="grupo">Grupo</label>
+                        <input id="grupo" name="grupo" type="text" class="form-control">
+                    </div>
+                </div>
+                <div class="col col-3">
+                    <div class="form-group">
+                        <label for="login">Login</label>
+                        <input id="login" name="login" type="text" class="form-control">
+                    </div>
+                </div>
+                <div class="col col-3">
+                    <div class="form-group">
+                        <label for="senha">Senha</label>
+                        <input id="senha" name="senha" type="password" class="form-control">
                     </div>
                 </div>
             </div>
             <div class="row">
                 <div class="col col-12">
                     <div class="form-group">
-                        <button class="btn btn-success"><i class="fa fa-save"></i> Salvar</button>
+                        <button class="btn btn-success" type="submit"><i class="fa fa-save"></i> Salvar</button>
                         <button class="btn btn-danger"><i class="fa fa-trash"></i> Excluir</button>
                     </div>
                 </div>

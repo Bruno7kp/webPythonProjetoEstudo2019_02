@@ -1,5 +1,5 @@
 from typing import List
-from model import BaseModel
+from model.base import BaseModel
 
 
 class Produto(BaseModel):
