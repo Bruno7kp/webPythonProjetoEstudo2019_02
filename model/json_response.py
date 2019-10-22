@@ -1,10 +1,13 @@
 from typing import List
+
+from flask import jsonify
+
 from model.base import BaseModel
 
 
 def json_response(message: str, data: List[BaseModel], redirect: str = None):
-    return {
+    return jsonify({
         'message': message,
         'data': [e.serialize() for e in data],
         'redirect': redirect
-    }
+    })

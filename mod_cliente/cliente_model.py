@@ -116,3 +116,11 @@ class ClienteModel(BaseModel):
             list_all.append(cliente)
         c.close()
         return list_all
+
+    def login_exists(self, login, exceptid):
+        c = self.db.con.cursor()
+        c.execute("""SELECT id_cliente FROM tb_clientes WHERE id_cliente != %s AND login = %s""", (exceptid, login))
+        return c.rowcount > 0
+
+    def valid_pass(self, password):
+        return len(password) < 4
