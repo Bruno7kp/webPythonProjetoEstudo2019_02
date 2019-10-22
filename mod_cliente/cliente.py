@@ -12,7 +12,9 @@ bp_cliente = Blueprint('cliente', __name__, url_prefix='/', template_folder='tem
 @bp_cliente.route('/clientes', methods=['GET'])
 @logado
 def lista():
-    return render_template('formListaClientes.html')
+    cliente = ClienteModel()
+    clientes = cliente.all()
+    return render_template('formListaClientes.html', lista=clientes)
 
 
 @bp_cliente.route('/cliente', methods=['GET'])

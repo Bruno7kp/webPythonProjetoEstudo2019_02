@@ -70,10 +70,10 @@ class ClienteModel(BaseModel):
         c.close()
         return rows
 
-    def select(self, id_produto):
+    def select(self, id_cliente):
         c = self.db.con.cursor()
         c.execute("""SELECT id_cliente, nome, endereco, numero, observacao, cep, bairro, cidade, estado, telefone,
-         email, login, senha, grupo FROM tb_clientes WHERE id_cliente = %s""", id_produto)
+         email, login, senha, grupo FROM tb_clientes WHERE id_cliente = %s""", id_cliente)
         for row in c:
             self.id_cliente = row[0]
             self.nome = row[1]
@@ -97,21 +97,22 @@ class ClienteModel(BaseModel):
         c.execute("""SELECT id_cliente, nome, endereco, numero, observacao, cep, bairro, cidade, estado, telefone,
          email, login, senha, grupo FROM tb_clientes ORDER BY nome""")
         list_all: List[ClienteModel] = []
-        for (row, key) in c:
-            list_all[key] = ClienteModel()
-            list_all[key].id_cliente = row[0]
-            list_all[key].nome = row[1]
-            list_all[key].endereco = row[2]
-            list_all[key].numero = row[3]
-            list_all[key].observacao = row[4]
-            list_all[key].cep = row[5]
-            list_all[key].bairro = row[6]
-            list_all[key].cidade = row[7]
-            list_all[key].estado = row[8]
-            list_all[key].telefone = row[9]
-            list_all[key].email = row[10]
-            list_all[key].login = row[11]
-            list_all[key].senha = row[12]
-            list_all[key].grupo = row[13]
+        for row in c:
+            cliente = ClienteModel()
+            cliente.id_cliente = row[0]
+            cliente.nome = row[1]
+            cliente.endereco = row[2]
+            cliente.numero = row[3]
+            cliente.observacao = row[4]
+            cliente.cep = row[5]
+            cliente.bairro = row[6]
+            cliente.cidade = row[7]
+            cliente.estado = row[8]
+            cliente.telefone = row[9]
+            cliente.email = row[10]
+            cliente.login = row[11]
+            cliente.senha = row[12]
+            cliente.grupo = row[13]
+            list_all.append(cliente)
         c.close()
         return list_all

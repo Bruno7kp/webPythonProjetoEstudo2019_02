@@ -22,20 +22,22 @@
                         <th>E-mail</th>
                         <th></th>
                     </tr>
+                    {% for cliente in lista %}
                     <tr>
-                        <td>1</td>
-                        <td>Fulano</td>
-                        <td>Rua tal</td>
-                        <td>123</td>
-                        <td>Nenhuma</td>
-                        <td>88500-000</td>
-                        <td>Centro</td>
-                        <td>Lages</td>
-                        <td>SC</td>
-                        <td>(49) 99999-9999</td>
-                        <td>teste@exemplo.com</td>
-                        <td><a href="{{ url_for("cliente.cadastro_form") }}" class="btn btn-light"><i class="fa fa-edit"></i></a></td>
+                        <td>{{ cliente.id_cliente }}</td>
+                        <td>{{ cliente.nome }}</td>
+                        <td>{{ cliente.endereco }}</td>
+                        <td>{{ cliente.numero }}</td>
+                        <td>{{ cliente.observacao }}</td>
+                        <td>{{ cliente.cep }}</td>
+                        <td>{{ cliente.bairro }}</td>
+                        <td>{{ cliente.cidade }}</td>
+                        <td>{{ cliente.estado }}</td>
+                        <td>{{ cliente.telefone }}</td>
+                        <td>{{ cliente.email }}</td>
+                        <td><a href="{{ url_for("cliente.edicao_form", clienteid=cliente.id_cliente) }}" class="btn btn-light"><i class="fa fa-edit"></i></a></td>
                     </tr>
+                    {% endfor %}
                 </table>
             </div>
         </div>
