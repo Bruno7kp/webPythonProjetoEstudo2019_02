@@ -4,6 +4,7 @@
 
 {% block content %}
     <div class="container mt-5">
-        <h1>Página inicial</h1>
+        <h3>Bem vindo, {{ session['user'].nome }}.</h3>
+        <small>Nível de usuário: {{ session['user'].grupo_name }}</small>
     </div>
 {% endblock %}

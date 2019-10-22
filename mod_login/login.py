@@ -14,7 +14,7 @@ def logado(f):
     """Verifica se usuario esta logado, impede que acesse o site caso tenha atingido o limite de tempo na sessao"""
     @wraps(f)
     def decorated_function(*args, **kwargs):
-        if 'login' not in session:
+        if 'user' not in session:
             return redirect(url_for('login.entrar'))
         if 'time' in session:
             now = time.time()
@@ -46,7 +46,7 @@ def login():
     cliente.select_by_login(usuario)
     if cliente.id_cliente > 0 and ClienteModel.check_hash(senha, cliente.senha):
         session.permanent = True
-        session['login'] = cliente.id_cliente
+        session['user'] = cliente.serialize()
         session['time'] = time.time()
         return redirect(url_for('home.home'))
     return redirect(url_for('login.entrar', erro=1))
@@ -54,5 +54,6 @@ def login():
 
 @bp_login.route('/logout')
 def sair():
-    session.pop('login', None)
+    session.pop('user', None)
+    session.pop('time', None)
     return redirect(url_for('login.entrar'))

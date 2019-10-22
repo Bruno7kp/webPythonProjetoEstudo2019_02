@@ -37,6 +37,7 @@ class ClienteModel(BaseModel):
             'email': self.email,
             'login': self.login,
             'grupo': self.grupo,
+            'grupo_name': ClienteModel.get_group_name(self.grupo)
         }
 
     def insert(self) -> int:
@@ -122,6 +123,14 @@ class ClienteModel(BaseModel):
         rows = c.rowcount
         c.close()
         return rows > 0
+
+    @staticmethod
+    def get_group_name(group: str):
+        if group == 'user':
+            return 'Cliente'
+        elif group == 'admin':
+            return 'Administrador'
+        return ''
 
     @staticmethod
     def valid_pass(password):
