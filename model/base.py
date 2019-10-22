@@ -1,9 +1,11 @@
+import json
+
 import pymysql
 import abc
 
 DB_HOST = "127.0.0.1"
 DB_USER = "root"
-DB_PASSWORD = ""
+DB_PASSWORD = "echo*cloud321"
 DB_NAME = "db_abc_bolinhas"
 
 
@@ -15,6 +17,10 @@ class DataBase:
 class BaseModel:
     def __init__(self):
         self.db = DataBase()
+
+    @abc.abstractmethod
+    def serialize(self):
+        return {}
 
     @abc.abstractmethod
     def insert(self) -> int:

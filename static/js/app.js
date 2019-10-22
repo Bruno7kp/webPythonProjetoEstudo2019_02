@@ -56,18 +56,24 @@ const App = {
         }
     },
     onFormError: (response) => {
-        console.log(response);
+        alert(response.message);
     },
     onNotAuth: () => {
-        console.log('não logado');
+        alert('não logado');
     },
     onForbidden: () => {
-        console.log('não autorizado');
+        alert('não autorizado');
     },
     onServerError: () => {
-        console.log('erro');
+        alert('erro no servidor, tente mais tarde');
     },
     onFormSuccess: (response) => {
         console.log(response);
+        alert(response.message);
+        if (response.redirect && response.redirect.length > 0) {
+            setTimeout(() => {
+                window.location.href = response.redirect;
+            },1500);
+        }
     },
 };

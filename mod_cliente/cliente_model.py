@@ -21,6 +21,24 @@ class ClienteModel(BaseModel):
         self.senha = senha
         self.grupo = grupo
 
+    def serialize(self):
+        return {
+            'id_cliente': self.id_cliente,
+            'nome': self.nome,
+            'endereco': self.endereco,
+            'numero': self.numero,
+            'observacao': self.observacao,
+            'cep': self.cep,
+            'bairro': self.bairro,
+            'cidade': self.cidade,
+            'estado': self.estado,
+            'telefone': self.telefone,
+            'email': self.email,
+            'login': self.login,
+            'senha': self.senha,
+            'grupo': self.grupo,
+        }
+
     def insert(self) -> int:
         c = self.db.con.cursor()
         c.execute("""INSERT INTO tb_clientes (nome, endereco, numero, observacao, cep, bairro, cidade, estado, telefone,
