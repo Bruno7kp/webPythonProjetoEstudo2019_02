@@ -3,6 +3,8 @@ from flask import Blueprint, render_template, redirect, url_for, request, sessio
 from functools import wraps
 import time
 
+from mod_cliente.cliente_model import ClienteModel
+
 bp_login = Blueprint('login', __name__, url_prefix='/', template_folder='templates')
 
 SESSION_LIMIT = 30
@@ -40,11 +42,11 @@ def entrar():
 def login():
     usuario = request.form.get('login')
     senha = request.form.get('senha')
-    realusuario = 'abc'
-    realsenha = 'Bolinhas'
-    if usuario == realusuario and senha == realsenha:
+    cliente = ClienteModel()
+    cliente.select_by_login(usuario)
+    if cliente.id_cliente > 0 and ClienteModel.check_hash(senha, cliente.senha):
         session.permanent = True
-        session['login'] = usuario
+        session['login'] = cliente.id_cliente
         session['time'] = time.time()
         return redirect(url_for('home.home'))
     return redirect(url_for('login.entrar', erro=1))

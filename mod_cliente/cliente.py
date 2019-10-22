@@ -2,7 +2,6 @@
 from flask import Blueprint, render_template, jsonify, request, make_response, url_for, redirect
 from mod_login.login import logado
 from mod_cliente.cliente_model import ClienteModel
-import hashlib
 
 from model.json_response import json_response
 
@@ -41,15 +40,15 @@ def edicao_form(clienteid: int):
 def cadastro():
     # Cadastro via ajax
     cliente = ClienteModel()
-    create_from_request(cliente)
+    populate_from_request(cliente)
 
-    if not cliente.valid_pass(request.form['senha']):
+    if not ClienteModel.valid_pass(request.form['senha']):
         return json_response(message='A senha deve ter pelo menos 4 dígitos', data=[]), 400
 
     if cliente.login_exists(cliente.login, 0):
         return json_response(message='O login já está em uso, utilize outro', data=[]), 400
 
-    cliente.senha = request.form['senha']
+    cliente.senha = ClienteModel.hash(request.form['senha'])
     identifier = cliente.insert()
     if identifier > 0:
         return json_response(message='Cliente cadastrado!', data=[cliente], redirect=url_for('cliente.lista')), 201
@@ -66,12 +65,13 @@ def edicao(clienteid):
     cliente.select(clienteid)
     if cliente.id_cliente == 0:
         return json_response(message='Cliente não encontrado!', data=[], redirect=url_for('cliente.lista')), 404
-    create_from_request(cliente)
+    
+    populate_from_request(cliente)
 
     if len(request.form['senha']) > 0:
-        if not cliente.valid_pass(request.form['senha']):
+        if not ClienteModel.valid_pass(request.form['senha']):
             return json_response(message='A senha deve ter pelo menos 4 dígitos', data=[]), 400
-        cliente.senha = request.form['senha']
+        cliente.senha = ClienteModel.hash(request.form['senha'])
 
     if cliente.login_exists(cliente.login, cliente.id_cliente):
         return json_response(message='O login já está em uso, utilize outro', data=[]), 400
@@ -99,7 +99,7 @@ def remocao(clienteid):
         return json_response(message='Não foi possível remover o cliente', data=[]), 400
 
 
-def create_from_request(cliente: ClienteModel):
+def populate_from_request(cliente: ClienteModel):
     # Atribui valores do post ao model
     cliente.nome = request.form['nome']
     cliente.endereco = request.form['endereco']

@@ -1,4 +1,5 @@
 from typing import List
+import bcrypt
 from model.base import BaseModel
 
 
@@ -35,7 +36,6 @@ class ClienteModel(BaseModel):
             'telefone': self.telefone,
             'email': self.email,
             'login': self.login,
-            'senha': self.senha,
             'grupo': self.grupo,
         }
 
@@ -75,20 +75,16 @@ class ClienteModel(BaseModel):
         c.execute("""SELECT id_cliente, nome, endereco, numero, observacao, cep, bairro, cidade, estado, telefone,
          email, login, senha, grupo FROM tb_clientes WHERE id_cliente = %s""", id_cliente)
         for row in c:
-            self.id_cliente = row[0]
-            self.nome = row[1]
-            self.endereco = row[2]
-            self.numero = row[3]
-            self.observacao = row[4]
-            self.cep = row[5]
-            self.bairro = row[6]
-            self.cidade = row[7]
-            self.estado = row[8]
-            self.telefone = row[9]
-            self.email = row[10]
-            self.login = row[11]
-            self.senha = row[12]
-            self.grupo = row[13]
+            self.populate_from_db(row)
+        c.close()
+        return self
+
+    def select_by_login(self, login):
+        c = self.db.con.cursor()
+        c.execute("""SELECT id_cliente, nome, endereco, numero, observacao, cep, bairro, cidade, estado, telefone,
+         email, login, senha, grupo FROM tb_clientes WHERE login = %s""", login)
+        for row in c:
+            self.populate_from_db(row)
         c.close()
         return self
 
@@ -99,28 +95,42 @@ class ClienteModel(BaseModel):
         list_all: List[ClienteModel] = []
         for row in c:
             cliente = ClienteModel()
-            cliente.id_cliente = row[0]
-            cliente.nome = row[1]
-            cliente.endereco = row[2]
-            cliente.numero = row[3]
-            cliente.observacao = row[4]
-            cliente.cep = row[5]
-            cliente.bairro = row[6]
-            cliente.cidade = row[7]
-            cliente.estado = row[8]
-            cliente.telefone = row[9]
-            cliente.email = row[10]
-            cliente.login = row[11]
-            cliente.senha = row[12]
-            cliente.grupo = row[13]
+            cliente.populate_from_db(row)
             list_all.append(cliente)
         c.close()
         return list_all
 
+    def populate_from_db(self, row):
+        self.id_cliente = row[0]
+        self.nome = row[1]
+        self.endereco = row[2]
+        self.numero = row[3]
+        self.observacao = row[4]
+        self.cep = row[5]
+        self.bairro = row[6]
+        self.cidade = row[7]
+        self.estado = row[8]
+        self.telefone = row[9]
+        self.email = row[10]
+        self.login = row[11]
+        self.senha = row[12]
+        self.grupo = row[13]
+
     def login_exists(self, login, exceptid):
         c = self.db.con.cursor()
         c.execute("""SELECT id_cliente FROM tb_clientes WHERE id_cliente != %s AND login = %s""", (exceptid, login))
-        return c.rowcount > 0
+        rows = c.rowcount
+        c.close()
+        return rows > 0
 
-    def valid_pass(self, password):
-        return len(password) < 4
+    @staticmethod
+    def valid_pass(password):
+        return len(password) >= 4
+
+    @staticmethod
+    def hash(password):
+        return bcrypt.hashpw(bytes(password, encoding='utf-8'), bcrypt.gensalt())
+
+    @staticmethod
+    def check_hash(password, hashed):
+        return bcrypt.checkpw(bytes(password, encoding='utf-8'), bytes(hashed, encoding='utf-8'))
