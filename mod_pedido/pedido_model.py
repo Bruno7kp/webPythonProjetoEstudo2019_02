@@ -2,13 +2,21 @@ from typing import List
 from model.base import BaseModel
 
 
-class Pedido(BaseModel):
+class PedidoModel(BaseModel):
     def __init__(self, id_pedido=0, data_hora="", id_cliente=0, observacao=""):
         super().__init__()
         self.id_pedido = id_pedido
         self.data_hora = data_hora
         self.id_cliente = id_cliente
         self.observacao = observacao
+
+    def serialize(self):
+        return {
+            'id_pedido': self.id_pedido,
+            'data_hora': self.data_hora,
+            'id_cliente': self.id_cliente,
+            'observacao': self.observacao,
+        }
 
     def insert(self) -> int:
         c = self.db.con.cursor()
@@ -50,9 +58,9 @@ class Pedido(BaseModel):
     def all(self):
         c = self.db.con.cursor()
         c.execute("""SELECT id_pedido, data_hora, id_cliente, observacao FROM tb_pedidos ORDER BY id_pedido DESC""")
-        list_all: List[Pedido] = []
+        list_all: List[PedidoModel] = []
         for (row, key) in c:
-            list_all[key] = Pedido()
+            list_all[key] = PedidoModel()
             list_all[key].id_pedido = row[0]
             list_all[key].data_hora = row[1]
             list_all[key].id_cliente = row[2]

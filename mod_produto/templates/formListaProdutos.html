@@ -4,7 +4,7 @@
 
 {% block content %}
     <div class="container mt-5">
-        <a class="btn btn-danger" href="{{ url_for("produto.formulario") }}"><i class="fas fa-plus-circle"></i> Novo produto</a>
+        <a class="btn btn-danger" href="{{ url_for("produto.cadastro_form") }}"><i class="fas fa-plus-circle"></i> Novo produto</a>
         <div class="row mt-3">
             <div class="col col-8">
                 <table class="table table-bordered">
@@ -15,13 +15,15 @@
                         <th>Imagem</th>
                         <th></th>
                     </tr>
+                    {% for produto in lista %}
                     <tr>
-                        <td>1</td>
-                        <td>Teste</td>
-                        <td>10,90</td>
-                        <td></td>
-                        <td><a href="{{ url_for("produto.formulario") }}" class="btn btn-light"><i class="fa fa-edit"></i></a></td>
+                        <td>{{ produto.id_produto }}</td>
+                        <td>{{ produto.descricao }}</td>
+                        <td>{{ produto.valor }}</td>
+                        <td><img height="50" src="{{ produto.imagem.decode("utf-8")  }}" alt="{{ produto.descricao }}"></td>
+                        <td><a href="{{ url_for("produto.edicao_form", produtoid=produto.id_produto) }}" class="btn btn-light"><i class="fa fa-edit"></i></a></td>
                     </tr>
+                    {% endfor %}
                 </table>
             </div>
         </div>

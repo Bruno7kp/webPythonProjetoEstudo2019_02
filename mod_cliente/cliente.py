@@ -1,5 +1,5 @@
 # coding: utf-8
-from flask import Blueprint, render_template, jsonify, request, make_response, url_for, redirect
+from flask import Blueprint, render_template, request, url_for, redirect
 from mod_login.login import logado
 from mod_cliente.cliente_model import ClienteModel
 

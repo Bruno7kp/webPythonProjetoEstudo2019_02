@@ -1,3 +1,4 @@
+from decimal import Decimal
 from typing import List
 from model.base import BaseModel
 
@@ -11,11 +12,17 @@ class ProdutoModel(BaseModel):
         self.imagem = imagem
 
     def serialize(self):
+        imagem = self.imagem
+        if isinstance(imagem, bytes):
+            imagem = imagem.decode("utf-8")
+        valor = self.valor
+        if isinstance(valor, Decimal):
+            valor = str(valor)
         return {
             'id_produto': self.id_produto,
             'descricao': self.descricao,
-            'valor': self.valor,
-            'imagem': self.imagem,
+            'valor': valor,
+            'imagem': imagem,
         }
 
     def insert(self) -> int:
@@ -59,11 +66,12 @@ class ProdutoModel(BaseModel):
         c = self.db.con.cursor()
         c.execute("""SELECT id_produto, descricao, valor, imagem FROM tb_produtos ORDER BY descricao""")
         list_all: List[ProdutoModel] = []
-        for (row, key) in c:
-            list_all[key] = ProdutoModel()
-            list_all[key].id_produto = row[0]
-            list_all[key].descricao = row[1]
-            list_all[key].valor = row[2]
-            list_all[key].imagem = row[3]
+        for row in c:
+            produto = ProdutoModel()
+            produto.id_produto = row[0]
+            produto.descricao = row[1]
+            produto.valor = row[2]
+            produto.imagem = row[3]
+            list_all.append(produto)
         c.close()
         return list_all

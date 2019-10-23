@@ -9,7 +9,6 @@ from mod_produto.produto import bp_produto
 from mod_cliente.cliente import bp_cliente
 from mod_login.login import bp_login, SESSION_LIMIT
 
-
 app = Flask(__name__)
 
 app.secret_key = b'_8#y2P"g8l1x\n\xec]/'

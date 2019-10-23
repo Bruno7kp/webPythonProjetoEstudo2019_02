@@ -52,12 +52,14 @@ const App = {
             for (let i = 0; i < del.length; i++) {
                 let d = del[i];
                 d.addEventListener("click", (ev) => {
-                    let url = d.getAttribute("data-delete");
-                    fetch(url, {
-                        method: 'delete'
-                    }).then((response) => {
-                        App.responseHandler(response);
-                    })
+                    if (confirm("Tem certeza que dejesa remover?")) {
+                        let url = d.getAttribute("data-delete");
+                        fetch(url, {
+                            method: 'delete'
+                        }).then((response) => {
+                            App.responseHandler(response);
+                        });
+                    }
                 });
             }
         }
@@ -93,7 +95,7 @@ const App = {
         if (response.redirect && response.redirect.length > 0) {
             setTimeout(() => {
                 window.location.href = response.redirect;
-            },500);
+            },300);
         }
     },
 };

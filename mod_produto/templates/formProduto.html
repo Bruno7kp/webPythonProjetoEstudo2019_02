@@ -5,12 +5,12 @@
 {% block content %}
     <div class="container mt-5">
         <h1>Produto</h1>
-        <form action="">
+        <form action="{{ url_for('produto.cadastro') if produto.id_produto == 0 else url_for('produto.edicao', produtoid=produto.id_produto) }}" method="post" enctype="multipart/form-data">
             <div class="row mt-3">
                 <div class="col col-3">
                     <div class="form-group">
                         <label for="codigo">Código</label>
-                        <input id="codigo" type="text" class="form-control" disabled>
+                        <input required id="codigo" type="text" class="form-control" value="{{ produto.id_produto }}" disabled>
                     </div>
                 </div>
             </div>
@@ -18,7 +18,7 @@
                 <div class="col col-6">
                     <div class="form-group">
                         <label for="descricao">Descrição</label>
-                        <input id="descricao" type="text" class="form-control">
+                        <input required id="descricao" name="descricao" type="text" class="form-control" value="{{ produto.descricao }}">
                     </div>
                 </div>
             </div>
@@ -26,7 +26,7 @@
                 <div class="col col-6">
                     <div class="form-group">
                         <label for="valor">Valor</label>
-                        <input id="valor" type="text" class="form-control">
+                        <input required id="valor" name="valor" type="text" class="form-control" value="{{ produto.valor }}">
                     </div>
                 </div>
             </div>
@@ -34,15 +34,17 @@
                 <div class="col col-6">
                     <div class="form-group">
                         <label for="imagem">Imagem</label>
-                        <input id="imagem" type="file" class="form-control">
+                        <input {% if produto.id_produto == 0 %}required{% endif %} id="imagem" name="imagem" type="file" class="form-control" accept="image/*">
                     </div>
                 </div>
             </div>
             <div class="row">
                 <div class="col col-12">
                     <div class="form-group">
-                        <button class="btn btn-success"><i class="fa fa-save"></i> Salvar</button>
-                        <button class="btn btn-danger"><i class="fa fa-trash"></i> Excluir</button>
+                        <button class="btn btn-success" type="submit"><i class="fa fa-save"></i> Salvar</button>
+                        {% if produto.id_produto > 0 %}
+                        <button data-delete="{{ url_for('produto.remocao', produtoid=produto.id_produto) }}" class="btn btn-danger" type="button"><i class="fa fa-trash"></i> Excluir</button>
+                        {% endif %}
                     </div>
                 </div>
             </div>

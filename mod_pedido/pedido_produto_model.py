@@ -1,8 +1,8 @@
 from typing import List
-from model import BaseModel
+from model.base import BaseModel
 
 
-class PedidoProduto(BaseModel):
+class PedidoProdutoModel(BaseModel):
     def __init__(self, id_pedido=0, id_produto=0, quantidade=0, valor=0, observacao=""):
         super().__init__()
         self.id_pedido = id_pedido
@@ -10,6 +10,15 @@ class PedidoProduto(BaseModel):
         self.quantidade = quantidade
         self.valor = valor
         self.observacao = observacao
+
+    def serialize(self):
+        return {
+            'id_pedido': self.id_pedido,
+            'id_produto': self.id_produto,
+            'quantidade': self.quantidade,
+            'valor': self.valor,
+            'observacao': self.observacao,
+        }
 
     def insert(self) -> int:
         c = self.db.con.cursor()
@@ -44,9 +53,9 @@ class PedidoProduto(BaseModel):
         c = self.db.con.cursor()
         c.execute("""SELECT id_pedido, id_produto, quantidade, valor, observacao 
                 FROM tb_pedido_produtos WHERE id_pedido = %s""", id_pedido)
-        list_all: List[PedidoProduto] = []
+        list_all: List[PedidoProdutoModel] = []
         for (row, key) in c:
-            list_all[key] = PedidoProduto()
+            list_all[key] = PedidoProdutoModel()
             list_all[key].id_pedido = row[0]
             list_all[key].id_produto = row[1]
             list_all[key].quantidade = row[2]
@@ -59,9 +68,9 @@ class PedidoProduto(BaseModel):
         c = self.db.con.cursor()
         c.execute("""SELECT id_pedido, id_produto, quantidade, valor, observacao 
         FROM tb_pedido_produtos ORDER BY id_pedido DESC""")
-        list_all: List[PedidoProduto] = []
+        list_all: List[PedidoProdutoModel] = []
         for (row, key) in c:
-            list_all[key] = PedidoProduto()
+            list_all[key] = PedidoProdutoModel()
             list_all[key].id_pedido = row[0]
             list_all[key].id_produto = row[1]
             list_all[key].quantidade = row[2]
