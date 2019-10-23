@@ -74,7 +74,7 @@ class ClienteModel(BaseModel):
     def select(self, id_cliente):
         c = self.db.con.cursor()
         c.execute("""SELECT id_cliente, nome, endereco, numero, observacao, cep, bairro, cidade, estado, telefone,
-         email, login, senha, grupo FROM tb_clientes WHERE id_cliente = %s""", id_cliente)
+         email, login, senha, grupo FROM tb_clientes WHERE id_cliente = %s ORDER BY nome""", id_cliente)
         for row in c:
             self.populate_from_db(row)
         c.close()

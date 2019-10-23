@@ -53,7 +53,8 @@ class ProdutoModel(BaseModel):
 
     def select(self, id_produto):
         c = self.db.con.cursor()
-        c.execute("""SELECT id_produto, descricao, valor, imagem FROM tb_produtos WHERE id_produto = %s""", id_produto)
+        c.execute("""SELECT id_produto, descricao, valor, imagem FROM tb_produtos WHERE id_produto = %s ORDER BY 
+        descricao""", id_produto)
         for row in c:
             self.id_produto = row[0]
             self.descricao = row[1]
