@@ -35,7 +35,16 @@
                     <div class="form-group">
                         <label for="imagem">Imagem</label>
                         <input {% if produto.id_produto == 0 %}required{% endif %} id="imagem" name="imagem" type="file" class="form-control" accept="image/*">
+                        {% if produto.id_produto > 0 %}<small>Selecione uma nova imagem para substituir a imagem atual.</small>{% endif %}
                     </div>
+                    {% if produto.id_produto > 0 %}
+                    <div class="form-group">
+                        <label>Imagem atual:</label><br/>
+                        <a href="{{ produto.imagem.decode("utf-8")  }}" target="_blank">
+                            <img src="{{ produto.imagem.decode("utf-8")  }}" alt="{{ produto.descricao }}" height="200">
+                        </a>
+                    </div>
+                    {% endif %}
                 </div>
             </div>
             <div class="row">

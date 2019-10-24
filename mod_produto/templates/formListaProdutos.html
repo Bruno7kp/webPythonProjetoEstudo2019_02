@@ -20,7 +20,11 @@
                         <td>{{ produto.id_produto }}</td>
                         <td>{{ produto.descricao }}</td>
                         <td>{{ produto.valor }}</td>
-                        <td><img height="50" src="{{ produto.imagem.decode("utf-8")  }}" alt="{{ produto.descricao }}"></td>
+                        <td>
+                            <a href="{{ produto.imagem.decode("utf-8")  }}" target="_blank">
+                                <img height="50" src="{{ produto.imagem.decode("utf-8")  }}" alt="{{ produto.descricao }}">
+                            </a>
+                        </td>
                         <td><a href="{{ url_for("produto.edicao_form", produtoid=produto.id_produto) }}" class="btn btn-light"><i class="fa fa-edit"></i></a></td>
                     </tr>
                     {% endfor %}
