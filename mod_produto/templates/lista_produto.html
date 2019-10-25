@@ -19,7 +19,7 @@
                     <tr>
                         <td>{{ produto.id_produto }}</td>
                         <td>{{ produto.descricao }}</td>
-                        <td>{{ produto.valor }}</td>
+                        <td>{{ produto.valor | money }}</td>
                         <td>
                             <a href="{{ produto.imagem.decode("utf-8")  }}" target="_blank">
                                 <img height="50" src="{{ produto.imagem.decode("utf-8")  }}" alt="{{ produto.descricao }}">

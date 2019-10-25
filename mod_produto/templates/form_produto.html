@@ -26,7 +26,7 @@
                 <div class="col col-6">
                     <div class="form-group">
                         <label for="valor">Valor</label>
-                        <input required id="valor" name="valor" type="text" class="form-control" value="{{ produto.valor }}">
+                        <input required id="valor" name="valor" pattern="\d{1,8}(?:[,]\d{1,2})?" type="text" placeholder="Ex: 10,50" class="form-control" value="{{ produto.valor | money }}">
                     </div>
                 </div>
             </div>

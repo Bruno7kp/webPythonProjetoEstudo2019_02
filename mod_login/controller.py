@@ -3,7 +3,7 @@ from flask import Blueprint, render_template, redirect, url_for, request, sessio
 from functools import wraps
 import time
 
-from mod_cliente.cliente_model import ClienteModel
+from mod_cliente.model import Cliente
 
 bp_login = Blueprint('login', __name__, url_prefix='/', template_folder='templates')
 
@@ -35,16 +35,16 @@ def entrar():
     elif erro == '2':
         mensagem = 'Sua sessão expirou, faça login novamente!'
 
-    return render_template('formLogin.html', mensagem=mensagem), 200
+    return render_template('login.html', mensagem=mensagem), 200
 
 
 @bp_login.route('/login', methods=['POST'])
 def login():
     usuario = request.form.get('login')
     senha = request.form.get('senha')
-    cliente = ClienteModel()
+    cliente = Cliente()
     cliente.select_by_login(usuario)
-    if cliente.id_cliente > 0 and ClienteModel.check_hash(senha, cliente.senha):
+    if cliente.id_cliente > 0 and Cliente.check_hash(senha, cliente.senha):
         session.permanent = True
         session['user'] = cliente.serialize()
         session['time'] = time.time()

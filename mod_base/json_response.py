@@ -1,8 +1,6 @@
 from typing import List
-
 from flask import jsonify
-
-from model.base import BaseModel
+from mod_base.base import BaseModel
 
 
 def json_response(message: str, data: List[BaseModel], redirect: str = None):

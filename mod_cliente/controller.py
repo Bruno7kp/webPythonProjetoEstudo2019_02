@@ -1,9 +1,9 @@
 # coding: utf-8
 from flask import Blueprint, render_template, request, url_for, redirect
-from mod_login.login import logado
-from mod_cliente.cliente_model import ClienteModel
+from mod_login.controller import logado
+from mod_cliente.model import Cliente
 
-from model.json_response import json_response
+from mod_base.json_response import json_response
 
 bp_cliente = Blueprint('cliente', __name__, url_prefix='/', template_folder='templates')
 
@@ -11,44 +11,44 @@ bp_cliente = Blueprint('cliente', __name__, url_prefix='/', template_folder='tem
 @bp_cliente.route('/clientes', methods=['GET'])
 @logado
 def lista():
-    cliente = ClienteModel()
+    cliente = Cliente()
     clientes = cliente.all()
-    return render_template('formListaClientes.html', lista=clientes)
+    return render_template('lista_cliente.html', lista=clientes)
 
 
 @bp_cliente.route('/cliente', methods=['GET'])
 @logado
 def cadastro_form():
     # Paǵina de cadastro
-    cliente = ClienteModel()
-    return render_template('formCliente.html', cliente=cliente)
+    cliente = Cliente()
+    return render_template('form_cliente.html', cliente=cliente)
 
 
 @bp_cliente.route('/cliente/<int:clienteid>', methods=['GET'])
 @logado
 def edicao_form(clienteid: int):
     # Página de edição
-    cliente = ClienteModel()
+    cliente = Cliente()
     cliente.select(clienteid)
     if cliente.id_cliente == 0:
         return redirect(url_for('cliente.lista'))
-    return render_template('formCliente.html', cliente=cliente)
+    return render_template('form_cliente.html', cliente=cliente)
 
 
 @bp_cliente.route('/cliente', methods=['POST'])
 @logado
 def cadastro():
     # Cadastro via ajax
-    cliente = ClienteModel()
+    cliente = Cliente()
     populate_from_request(cliente)
 
-    if not ClienteModel.valid_pass(request.form['senha']):
+    if not Cliente.valid_pass(request.form['senha']):
         return json_response(message='A senha deve ter pelo menos 4 dígitos', data=[]), 400
 
     if cliente.login_exists(cliente.login, 0):
         return json_response(message='O login já está em uso, utilize outro', data=[]), 400
 
-    cliente.senha = ClienteModel.hash(request.form['senha'])
+    cliente.senha = Cliente.hash(request.form['senha'])
     identifier = cliente.insert()
     if identifier > 0:
         return json_response(message='Cliente cadastrado!', data=[cliente], redirect=url_for('cliente.lista')), 201
@@ -61,7 +61,7 @@ def cadastro():
 def edicao(clienteid):
     # Edição via ajax
     # Verifica se usuário existe
-    cliente = ClienteModel()
+    cliente = Cliente()
     cliente.select(clienteid)
     if cliente.id_cliente == 0:
         return json_response(message='Cliente não encontrado!', data=[], redirect=url_for('cliente.lista')), 404
@@ -69,9 +69,9 @@ def edicao(clienteid):
     populate_from_request(cliente)
 
     if len(request.form['senha']) > 0:
-        if not ClienteModel.valid_pass(request.form['senha']):
+        if not Cliente.valid_pass(request.form['senha']):
             return json_response(message='A senha deve ter pelo menos 4 dígitos', data=[]), 400
-        cliente.senha = ClienteModel.hash(request.form['senha'])
+        cliente.senha = Cliente.hash(request.form['senha'])
 
     if cliente.login_exists(cliente.login, cliente.id_cliente):
         return json_response(message='O login já está em uso, utilize outro', data=[]), 400
@@ -88,7 +88,7 @@ def edicao(clienteid):
 def remocao(clienteid):
     # Remoção via ajax
     # Verifica se usuário existe
-    cliente = ClienteModel()
+    cliente = Cliente()
     cliente.select(clienteid)
     if cliente.id_cliente == 0:
         return json_response(message='Cliente não encontrado!', data=[], redirect=url_for('cliente.lista')), 404
@@ -99,7 +99,7 @@ def remocao(clienteid):
         return json_response(message='Não foi possível remover o cliente', data=[]), 400
 
 
-def populate_from_request(cliente: ClienteModel):
+def populate_from_request(cliente: Cliente):
     # Atribui valores do post ao model
     cliente.nome = request.form['nome']
     cliente.endereco = request.form['endereco']

@@ -1,9 +1,9 @@
 from typing import List
 import bcrypt
-from model.base import BaseModel
+from mod_base.base import BaseModel
 
 
-class ClienteModel(BaseModel):
+class Cliente(BaseModel):
     def __init__(self, id_cliente=0, nome="", endereco="", numero=0, observacao="", cep="", bairro="", cidade="",
                  estado="", telefone="", email="", login="", senha="", grupo=""):
         super().__init__()
@@ -37,7 +37,7 @@ class ClienteModel(BaseModel):
             'email': self.email,
             'login': self.login,
             'grupo': self.grupo,
-            'grupo_name': ClienteModel.get_group_name(self.grupo)
+            'grupo_name': Cliente.get_group_name(self.grupo)
         }
 
     def insert(self) -> int:
@@ -93,9 +93,9 @@ class ClienteModel(BaseModel):
         c = self.db.con.cursor()
         c.execute("""SELECT id_cliente, nome, endereco, numero, observacao, cep, bairro, cidade, estado, telefone,
          email, login, senha, grupo FROM tb_clientes ORDER BY nome""")
-        list_all: List[ClienteModel] = []
+        list_all: List[Cliente] = []
         for row in c:
-            cliente = ClienteModel()
+            cliente = Cliente()
             cliente.populate_from_db(row)
             list_all.append(cliente)
         c.close()

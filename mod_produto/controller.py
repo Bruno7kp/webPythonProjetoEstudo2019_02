@@ -2,9 +2,9 @@
 import base64
 
 from flask import Blueprint, render_template, redirect, url_for, request
-from mod_login.login import logado
-from mod_produto.produto_model import ProdutoModel
-from model.json_response import json_response
+from mod_login.controller import logado
+from mod_produto.model import Produto
+from mod_base.json_response import json_response
 
 bp_produto = Blueprint('produto', __name__, url_prefix='/', template_folder='templates')
 
@@ -12,35 +12,35 @@ bp_produto = Blueprint('produto', __name__, url_prefix='/', template_folder='tem
 @bp_produto.route("/produtos", methods=['GET'])
 @logado
 def lista():
-    produto = ProdutoModel()
+    produto = Produto()
     produtos = produto.all()
-    return render_template("formListaProdutos.html", lista=produtos)
+    return render_template("lista_produto.html", lista=produtos)
 
 
 @bp_produto.route("/produto", methods=['GET'])
 @logado
 def cadastro_form():
     # Página de cadastro
-    produto = ProdutoModel()
-    return render_template("formProduto.html", produto=produto)
+    produto = Produto()
+    return render_template("form_produto.html", produto=produto)
 
 
 @bp_produto.route("/produto/<int:produtoid>", methods=['GET'])
 @logado
 def edicao_form(produtoid: int):
     # Página de edição
-    produto = ProdutoModel()
+    produto = Produto()
     produto.select(produtoid)
     if produto.id_produto == 0:
         return redirect(url_for('produto.lista'))
-    return render_template('formProduto.html', produto=produto)
+    return render_template('form_produto.html', produto=produto)
 
 
 @bp_produto.route('/cliente', methods=['POST'])
 @logado
 def cadastro():
     # Cadastro via ajax
-    produto = ProdutoModel()
+    produto = Produto()
     populate_from_request(produto)
 
     identifier = produto.insert()
@@ -55,7 +55,7 @@ def cadastro():
 def edicao(produtoid):
     # Edição via ajax
     # Verifica se usuário existe
-    produto = ProdutoModel()
+    produto = Produto()
     produto.select(produtoid)
     if produto.id_produto == 0:
         return json_response(message='Produto não encontrado!', data=[], redirect=url_for('produto.lista')), 404
@@ -74,7 +74,7 @@ def edicao(produtoid):
 def remocao(produtoid):
     # Remoção via ajax
     # Verifica se usuário existe
-    produto = ProdutoModel()
+    produto = Produto()
     produto.select(produtoid)
     if produto.id_produto == 0:
         return json_response(message='Produto não encontrado!', data=[], redirect=url_for('produto.lista')), 404
@@ -85,10 +85,10 @@ def remocao(produtoid):
         return json_response(message='Não foi possível remover o produto', data=[]), 400
 
 
-def populate_from_request(produto: ProdutoModel):
+def populate_from_request(produto: Produto):
     # Atribui valores do post ao model
     produto.descricao = request.form['descricao']
-    produto.valor = request.form['valor']
+    produto.valor = request.form['valor'].replace('.', '').replace(',', '.')
     if 'imagem' in request.files and request.files['imagem'].filename != '':
         produto.imagem = "data:" + request.files['imagem'].content_type + ";base64," + str(
             base64.b64encode(request.files['imagem'].read()), "utf-8")

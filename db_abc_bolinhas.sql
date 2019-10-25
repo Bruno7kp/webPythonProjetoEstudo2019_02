@@ -38,7 +38,7 @@ CREATE TABLE `tb_pedido_produtos` (
   `id_pedido` int(11) NOT NULL,
   `id_produto` int(11) NOT NULL,
   `quantidade` int(11) NOT NULL,
-  `valor` decimal(10,0) DEFAULT NULL,
+  `valor` decimal(10,2) DEFAULT NULL,
   `observacao` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -51,7 +51,7 @@ CREATE TABLE `tb_pedido_produtos` (
 CREATE TABLE `tb_produtos` (
   `id_produto` int(11) NOT NULL,
   `descricao` varchar(255) NOT NULL,
-  `valor` decimal(10,0) NOT NULL,
+  `valor` decimal(10,2) NOT NULL,
   `imagem` longblob
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 

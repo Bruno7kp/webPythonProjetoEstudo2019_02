@@ -90,7 +90,6 @@ const App = {
         alert('erro no servidor, tente mais tarde');
     },
     onFormSuccess: (response) => {
-        console.log(response);
         alert(response.message);
         if (response.redirect && response.redirect.length > 0) {
             setTimeout(() => {

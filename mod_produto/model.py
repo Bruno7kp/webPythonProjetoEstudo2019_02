@@ -1,9 +1,9 @@
 from decimal import Decimal
 from typing import List
-from model.base import BaseModel
+from mod_base.base import BaseModel
 
 
-class ProdutoModel(BaseModel):
+class Produto(BaseModel):
     def __init__(self, id_produto=0, descricao="", valor=0, imagem=""):
         super().__init__()
         self.id_produto = id_produto
@@ -66,9 +66,9 @@ class ProdutoModel(BaseModel):
     def all(self):
         c = self.db.con.cursor()
         c.execute("""SELECT id_produto, descricao, valor, imagem FROM tb_produtos ORDER BY descricao""")
-        list_all: List[ProdutoModel] = []
+        list_all: List[Produto] = []
         for row in c:
-            produto = ProdutoModel()
+            produto = Produto()
             produto.id_produto = row[0]
             produto.descricao = row[1]
             produto.valor = row[2]
