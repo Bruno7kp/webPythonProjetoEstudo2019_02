@@ -1,8 +1,10 @@
 const App = {
-    startUp: (sessionLimit, timeLogged, redirectUrl) => {
-        let loggedSince = timeLogged;
-        let minutesLimit = sessionLimit;
-
+    startUp: (minutesLimit, loggedSince, redirectUrl) => {
+        App.addSessionCounter(minutesLimit, loggedSince, redirectUrl);
+        App.addFormListener();
+        App.addDeleteListener();
+    },
+    addSessionCounter: (minutesLimit, loggedSince, redirectUrl) => {
         let counterEl = document.querySelector('#time-counter');
         if (loggedSince > 0 && counterEl != null) {
             setInterval(() => {
@@ -26,8 +28,6 @@ const App = {
                 }
             }, 1000);
         }
-        App.addFormListener();
-        App.addDeleteListener();
     },
     addFormListener: () => {
         let form = document.querySelector("form");
