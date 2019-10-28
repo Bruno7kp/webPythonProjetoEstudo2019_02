@@ -2,8 +2,8 @@
 import base64
 
 from flask import Blueprint, render_template, redirect, url_for, request
-from mod_login.controller import logado
-from mod_produto.model import Produto
+from mod_login.login_controller import logado
+from mod_produto.produto_model import Produto
 from mod_base.json_response import json_response
 
 bp_produto = Blueprint('produto', __name__, url_prefix='/', template_folder='templates')

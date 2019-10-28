@@ -1,7 +1,7 @@
 # coding: utf-8
 from flask import Blueprint, render_template, request, url_for, redirect
-from mod_login.controller import logado
-from mod_cliente.model import Cliente
+from mod_login.login_controller import logado
+from mod_cliente.cliente_model import Cliente
 
 from mod_base.json_response import json_response
 

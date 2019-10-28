@@ -1,6 +1,6 @@
 # coding: utf-8
 from flask import Blueprint, render_template
-from mod_login.controller import logado
+from mod_login.login_controller import logado
 
 bp_pedido = Blueprint('pedido', __name__, url_prefix='/', template_folder='templates')
 

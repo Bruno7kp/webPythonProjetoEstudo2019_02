@@ -3,7 +3,7 @@ from flask import Blueprint, render_template, redirect, url_for, request, sessio
 from functools import wraps
 import time
 
-from mod_cliente.model import Cliente
+from mod_cliente.cliente_model import Cliente
 
 bp_login = Blueprint('login', __name__, url_prefix='/', template_folder='templates')
 

@@ -2,12 +2,12 @@
 from datetime import timedelta
 
 from flask import Flask, redirect, url_for
-from mod_home.controller import bp_home
-from mod_pedido.controller import bp_pedido
-from mod_erro.controller import bp_erro
-from mod_produto.controller import bp_produto
-from mod_cliente.controller import bp_cliente
-from mod_login.controller import bp_login, SESSION_LIMIT
+from mod_home.home_controller import bp_home
+from mod_pedido.pedido_controller import bp_pedido
+from mod_erro.erro_controller import bp_erro
+from mod_produto.produto_controller import bp_produto
+from mod_cliente.cliente_controller import bp_cliente
+from mod_login.login_controller import bp_login, SESSION_LIMIT
 
 app = Flask(__name__)
 
