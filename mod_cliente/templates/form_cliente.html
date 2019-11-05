@@ -4,141 +4,152 @@
 
 {% block content %}
     <div class="container mt-5">
-        <h1>Cliente</h1>
-        <form action="{{ url_for('cliente.cadastro') if cliente.id_cliente == 0 else url_for('cliente.edicao', clienteid=cliente.id_cliente) }}" method="post">
-            <div class="row mt-3">
-                <div class="col col-3">
-                    <div class="form-group">
-                        <label for="codigo">Código</label>
-                        <input id="codigo" name="codigo" type="text" class="form-control" value="{{ cliente.id_cliente }}" disabled>
+        <a href="{{ url_for('cliente.lista') }}" class="btn btn-outline-secondary"><i class="fa fa-chevron-left"></i> VOLTAR</a>
+        <div class="row">
+            <div class="col-12">
+                <form action="{{ url_for('cliente.cadastro') if cliente.id_cliente == 0 else url_for('cliente.edicao', clienteid=cliente.id_cliente) }}" method="post">
+                    <div class="card bg-dark text-white mt-3">
+                        <div class="card-header">
+                            {{ 'ADICIONAR' if cliente.id_cliente == 0 else 'EDITAR' }} CLIENTE
+                            {% if cliente.id_cliente > 0 %}
+                                <button data-delete="{{ url_for('cliente.remocao', clienteid=cliente.id_cliente) }}" class="btn btn-danger btn-sm float-right" type="button"><i class="fa fa-trash"></i> Excluir</button>
+                            {% endif %}
+                        </div>
+                        <div class="card-body">
+                            <div class="row mt-3">
+                                <div class="col col-3">
+                                    <div class="form-group">
+                                        <label for="codigo">Código</label>
+                                        <input id="codigo" name="codigo" type="text" class="form-control" value="{{ cliente.id_cliente }}" disabled>
+                                    </div>
+                                </div>
+                                <div class="col col-9">
+                                    <div class="form-group">
+                                        <label for="nome">Nome do Cliente</label>
+                                        <input required id="nome" name="nome" type="text" class="form-control" value="{{ cliente.nome }}">
+                                    </div>
+                                </div>
+                                <div class="col col-9">
+                                    <div class="form-group">
+                                        <label for="endereco">Endereço</label>
+                                        <input required id="endereco" name="endereco" type="text" class="form-control" value="{{ cliente.endereco }}">
+                                    </div>
+                                </div>
+                                <div class="col col-3">
+                                    <div class="form-group">
+                                        <label for="numero">Número</label>
+                                        <input required id="numero" name="numero" type="text" class="form-control" value="{{ cliente.numero }}">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col col-12">
+                                    <div class="form-group">
+                                        <label for="observacao">Observação</label>
+                                        <input required id="observacao" name="observacao" type="text" class="form-control" value="{{ cliente.endereco }}">
+                                    </div>
+                                </div>
+                                <div class="col col-2">
+                                    <div class="form-group">
+                                        <label for="cep">CEP</label>
+                                        <input required id="cep" name="cep" type="text" class="form-control" value="{{ cliente.cep }}">
+                                    </div>
+                                </div>
+                                <div class="col col-3">
+                                    <div class="form-group">
+                                        <label for="bairro">Bairro</label>
+                                        <input required id="bairro" name="bairro" type="text" class="form-control" value="{{ cliente.bairro }}">
+                                    </div>
+                                </div>
+                                <div class="col col-3">
+                                    <div class="form-group">
+                                        <label for="cidade">Cidade</label>
+                                        <input required id="cidade" name="cidade" type="text" class="form-control" value="{{ cliente.cidade }}">
+                                    </div>
+                                </div>
+                                <div class="col col-4">
+                                    <div class="form-group">
+                                        <label for="estado">Estado</label>
+                                        <select required id="estado" name="estado" class="form-control">
+                                            <option value="AC" {% if cliente.estado == 'AC' %}selected{% endif %}>Acre</option>
+                                            <option value="AL" {% if cliente.estado == 'AL' %}selected{% endif %}>Alagoas</option>
+                                            <option value="AP" {% if cliente.estado == 'AP' %}selected{% endif %}>Amapá</option>
+                                            <option value="AM" {% if cliente.estado == 'AM' %}selected{% endif %}>Amazonas</option>
+                                            <option value="BA" {% if cliente.estado == 'BA' %}selected{% endif %}>Bahia</option>
+                                            <option value="CE" {% if cliente.estado == 'CE' %}selected{% endif %}>Ceará</option>
+                                            <option value="DF" {% if cliente.estado == 'DF' %}selected{% endif %}>Distrito Federal</option>
+                                            <option value="ES" {% if cliente.estado == 'ES' %}selected{% endif %}>Espírito Santo</option>
+                                            <option value="GO" {% if cliente.estado == 'GO' %}selected{% endif %}>Goiás</option>
+                                            <option value="MA" {% if cliente.estado == 'MA' %}selected{% endif %}>Maranhão</option>
+                                            <option value="MT" {% if cliente.estado == 'MT' %}selected{% endif %}>Mato Grosso</option>
+                                            <option value="MS" {% if cliente.estado == 'MS' %}selected{% endif %}>Mato Grosso do Sul</option>
+                                            <option value="MG" {% if cliente.estado == 'MG' %}selected{% endif %}>Minas Gerais</option>
+                                            <option value="PA" {% if cliente.estado == 'PA' %}selected{% endif %}>Pará</option>
+                                            <option value="PB" {% if cliente.estado == 'PB' %}selected{% endif %}>Paraíba</option>
+                                            <option value="PR" {% if cliente.estado == 'PR' %}selected{% endif %}>Paraná</option>
+                                            <option value="PE" {% if cliente.estado == 'PE' %}selected{% endif %}>Pernambuco</option>
+                                            <option value="PI" {% if cliente.estado == 'PI' %}selected{% endif %}>Piauí</option>
+                                            <option value="RJ" {% if cliente.estado == 'RJ' %}selected{% endif %}>Rio de Janeiro</option>
+                                            <option value="RN" {% if cliente.estado == 'RN' %}selected{% endif %}>Rio Grande do Norte</option>
+                                            <option value="RS" {% if cliente.estado == 'RS' %}selected{% endif %}>Rio Grande do Sul</option>
+                                            <option value="RO" {% if cliente.estado == 'RO' %}selected{% endif %}>Rondônia</option>
+                                            <option value="RR" {% if cliente.estado == 'RR' %}selected{% endif %}>Roraima</option>
+                                            <option value="SC" {% if cliente.estado == 'SC' %}selected{% endif %}>Santa Catarina</option>
+                                            <option value="SP" {% if cliente.estado == 'SP' %}selected{% endif %}>São Paulo</option>
+                                            <option value="SE" {% if cliente.estado == 'SE' %}selected{% endif %}>Sergipe</option>
+                                            <option value="TO" {% if cliente.estado == 'TO' %}selected{% endif %}>Tocantins</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col col-3">
+                                    <div class="form-group">
+                                        <label for="telefone">Telefone</label>
+                                        <input required id="telefone" name="telefone" type="tel" class="form-control" value="{{ cliente.telefone }}">
+                                    </div>
+                                </div>
+                                <div class="col col-3">
+                                    <div class="form-group">
+                                        <label for="email">E-mail</label>
+                                        <input required id="email" name="email" type="email" class="form-control" value="{{ cliente.email }}">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col col-3">
+                                    <div class="form-group">
+                                        <label for="grupo">Grupo</label>
+                                        <select required id="grupo" name="grupo" class="form-control">
+                                            <option value="user" {% if cliente.grupo == 'user' %}selected{% endif %}>Cliente (Solicitante)</option>
+                                            <option value="admin" {% if cliente.grupo == 'admin' %}selected{% endif %}>Administrador</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col col-3">
+                                    <div class="form-group">
+                                        <label for="login">Login</label>
+                                        <input required id="login" name="login" type="text" class="form-control" value="{{ cliente.login }}">
+                                    </div>
+                                </div>
+                                <div class="col col-4">
+                                    <div class="form-group">
+                                        <label for="senha">Senha</label>
+                                        <input {% if cliente.id_cliente == 0 %}required{% endif %} id="senha" name="senha" type="password" class="form-control">
+                                        {% if cliente.id_cliente > 0 %}<span class="d-block small text-secondary">Deixe o campo vazio para não alterar a senha</span>{% endif %}
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="card-footer">
+                            <div class="form-group mt-3">
+                                <button class="btn btn-success" type="submit"><i class="fa fa-save"></i> Salvar</button>
+                            </div>
+                        </div>
                     </div>
-                </div>
-                <div class="col col-9">
-                    <div class="form-group">
-                        <label for="nome">Nome do Cliente</label>
-                        <input required id="nome" name="nome" type="text" class="form-control" value="{{ cliente.nome }}">
-                    </div>
-                </div>
-                <div class="col col-9">
-                    <div class="form-group">
-                        <label for="endereco">Endereço</label>
-                        <input required id="endereco" name="endereco" type="text" class="form-control" value="{{ cliente.endereco }}">
-                    </div>
-                </div>
-                <div class="col col-3">
-                    <div class="form-group">
-                        <label for="numero">Número</label>
-                        <input required id="numero" name="numero" type="text" class="form-control" value="{{ cliente.numero }}">
-                    </div>
-                </div>
+                </form>
             </div>
-            <div class="row">
-                <div class="col col-12">
-                    <div class="form-group">
-                        <label for="observacao">Observação</label>
-                        <input required id="observacao" name="observacao" type="text" class="form-control" value="{{ cliente.endereco }}">
-                    </div>
-                </div>
-                <div class="col col-2">
-                    <div class="form-group">
-                        <label for="cep">CEP</label>
-                        <input required id="cep" name="cep" type="text" class="form-control" value="{{ cliente.cep }}">
-                    </div>
-                </div>
-                <div class="col col-3">
-                    <div class="form-group">
-                        <label for="bairro">Bairro</label>
-                        <input required id="bairro" name="bairro" type="text" class="form-control" value="{{ cliente.bairro }}">
-                    </div>
-                </div>
-                <div class="col col-3">
-                    <div class="form-group">
-                        <label for="cidade">Cidade</label>
-                        <input required id="cidade" name="cidade" type="text" class="form-control" value="{{ cliente.cidade }}">
-                    </div>
-                </div>
-                <div class="col col-4">
-                    <div class="form-group">
-                        <label for="estado">Estado</label>
-                        <select required id="estado" name="estado" class="form-control">
-                            <option value="AC" {% if cliente.estado == 'AC' %}selected{% endif %}>Acre</option>
-                            <option value="AL" {% if cliente.estado == 'AL' %}selected{% endif %}>Alagoas</option>
-                            <option value="AP" {% if cliente.estado == 'AP' %}selected{% endif %}>Amapá</option>
-                            <option value="AM" {% if cliente.estado == 'AM' %}selected{% endif %}>Amazonas</option>
-                            <option value="BA" {% if cliente.estado == 'BA' %}selected{% endif %}>Bahia</option>
-                            <option value="CE" {% if cliente.estado == 'CE' %}selected{% endif %}>Ceará</option>
-                            <option value="DF" {% if cliente.estado == 'DF' %}selected{% endif %}>Distrito Federal</option>
-                            <option value="ES" {% if cliente.estado == 'ES' %}selected{% endif %}>Espírito Santo</option>
-                            <option value="GO" {% if cliente.estado == 'GO' %}selected{% endif %}>Goiás</option>
-                            <option value="MA" {% if cliente.estado == 'MA' %}selected{% endif %}>Maranhão</option>
-                            <option value="MT" {% if cliente.estado == 'MT' %}selected{% endif %}>Mato Grosso</option>
-                            <option value="MS" {% if cliente.estado == 'MS' %}selected{% endif %}>Mato Grosso do Sul</option>
-                            <option value="MG" {% if cliente.estado == 'MG' %}selected{% endif %}>Minas Gerais</option>
-                            <option value="PA" {% if cliente.estado == 'PA' %}selected{% endif %}>Pará</option>
-                            <option value="PB" {% if cliente.estado == 'PB' %}selected{% endif %}>Paraíba</option>
-                            <option value="PR" {% if cliente.estado == 'PR' %}selected{% endif %}>Paraná</option>
-                            <option value="PE" {% if cliente.estado == 'PE' %}selected{% endif %}>Pernambuco</option>
-                            <option value="PI" {% if cliente.estado == 'PI' %}selected{% endif %}>Piauí</option>
-                            <option value="RJ" {% if cliente.estado == 'RJ' %}selected{% endif %}>Rio de Janeiro</option>
-                            <option value="RN" {% if cliente.estado == 'RN' %}selected{% endif %}>Rio Grande do Norte</option>
-                            <option value="RS" {% if cliente.estado == 'RS' %}selected{% endif %}>Rio Grande do Sul</option>
-                            <option value="RO" {% if cliente.estado == 'RO' %}selected{% endif %}>Rondônia</option>
-                            <option value="RR" {% if cliente.estado == 'RR' %}selected{% endif %}>Roraima</option>
-                            <option value="SC" {% if cliente.estado == 'SC' %}selected{% endif %}>Santa Catarina</option>
-                            <option value="SP" {% if cliente.estado == 'SP' %}selected{% endif %}>São Paulo</option>
-                            <option value="SE" {% if cliente.estado == 'SE' %}selected{% endif %}>Sergipe</option>
-                            <option value="TO" {% if cliente.estado == 'TO' %}selected{% endif %}>Tocantins</option>
-                        </select>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col col-3">
-                    <div class="form-group">
-                        <label for="telefone">Telefone</label>
-                        <input required id="telefone" name="telefone" type="tel" class="form-control" value="{{ cliente.telefone }}">
-                    </div>
-                </div>
-                <div class="col col-3">
-                    <div class="form-group">
-                        <label for="email">E-mail</label>
-                        <input required id="email" name="email" type="email" class="form-control" value="{{ cliente.email }}">
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col col-3">
-                    <div class="form-group">
-                        <label for="grupo">Grupo</label>
-                        <select required id="grupo" name="grupo" class="form-control">
-                            <option value="user" {% if cliente.grupo == 'user' %}selected{% endif %}>Cliente (Solicitante)</option>
-                            <option value="admin" {% if cliente.grupo == 'admin' %}selected{% endif %}>Administrador</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="col col-3">
-                    <div class="form-group">
-                        <label for="login">Login</label>
-                        <input required id="login" name="login" type="text" class="form-control" value="{{ cliente.login }}">
-                    </div>
-                </div>
-                <div class="col col-3">
-                    <div class="form-group">
-                        <label for="senha">Senha</label>
-                        <input {% if cliente.id_cliente == 0 %}required{% endif %} id="senha" name="senha" type="password" class="form-control">
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col col-12">
-                    <div class="form-group">
-                        <button class="btn btn-success" type="submit"><i class="fa fa-save"></i> Salvar</button>
-                        {% if cliente.id_cliente > 0 %}
-                        <button data-delete="{{ url_for('cliente.remocao', clienteid=cliente.id_cliente) }}" class="btn btn-danger" type="button"><i class="fa fa-trash"></i> Excluir</button>
-                        {% endif %}
-                    </div>
-                </div>
-            </div>
-        </form>
+        </div>
     </div>
 {% endblock %}

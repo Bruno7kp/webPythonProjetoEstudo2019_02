@@ -16,46 +16,38 @@
         <link rel="stylesheet" href="{{ url_for('static', filename='bootstrap-4.3.1/css/bootstrap.min.css') }}">
         <link rel="stylesheet" href="{{ url_for('static', filename='css/custom.css') }}">
         <link rel="stylesheet" href="{{ url_for('static', filename='fontawesome-free-5.10.2/css/all.min.css') }}">
-        <title>{% block title %}Home{% endblock %} - Projeto Final</title>
-        <style>
-        footer {
-            border-top: 2px solid black;
-        }
-        .time {
-            color: white;
-        }
-        </style>
+        <title>{% block title %}Home{% endblock %} - BoxStore</title>
     {% endblock %}
 </head>
-<body>
+<body class="{{ 'login-bg' if request.path == "/" else 'default-bg' }}">
 {% block menu %}
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <a class="navbar-brand" href="{{ url_for('home.home') }}">Projeto final</a>
+    <a class="navbar-brand" href="{{ url_for('home.home') }}">BoxStore</a>
     <ul class="navbar-nav mr-auto">
         <li class="nav-item">
-            <a class="nav-link" href="{{ url_for('home.home') }}"><i class="fas fa-home"></i> Home</a>
+            <a class="nav-link{{ ' active' if 'cliente' in request.path }}" href="{{ url_for('cliente.lista') }}"><i class="fas fa-users"></i> Clientes</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="{{ url_for('cliente.lista') }}"><i class="fas fa-users"></i> Clientes</a>
+            <a class="nav-link{{ ' active' if 'produto' in request.path }}" href="{{ url_for('produto.lista') }}"><i class="fas fa-pizza-slice"></i> Produtos</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="{{ url_for('produto.lista') }}"><i class="fas fa-pizza-slice"></i> Produtos</a>
+            <a class="nav-link{{ ' active' if 'pedido' in request.path }}" href="{{ url_for('pedido.lista') }}"><i class="fas fa-box-open"></i> Pedidos</a>
         </li>
-        <li class="nav-item">
-            <a class="nav-link" href="{{ url_for('pedido.lista') }}"><i class="fas fa-arrow-down"></i> Pedidos</a>
-        </li>
+    </ul>
+    <ul class="navbar-nav ml-auto">
         <li class="nav-item">
             <a class="nav-link" href="{{ url_for('login.sair') }}"><i class="fas fa-sign-out-alt"></i> Sair</a>
         </li>
     </ul>
-    <div class="time">Sessão <span id="time-counter">00:00:00</span></div>
+
 </nav>
 {% endblock %}
 {% block content %}{% endblock %}
 {% block footer %}
-    <div class="container-fluid mt-5">
+    <div class="container-fluid mt-5 px-0">
         <footer>
-            &copy; Copyright 2019 by <a href="{{ url_for('home.home') }}">Projeto final</a>.
+            &copy; Copyright 2019 by <a href="{{ url_for('home.home') }}">BoxStore</a>
+            <span class="d-inline-block float-right">Sessão <span id="time-counter">00:00:00</span></span>
         </footer>
     </div>
 {% endblock %}

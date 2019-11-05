@@ -4,7 +4,21 @@
 
 {% block content %}
     <div class="container mt-5">
-        <h3>Bem vindo, {{ session['user'].nome }}.</h3>
-        <small>Nível de usuário: {{ session['user'].grupo_name }}</small>
+        <div class="row">
+            <div class="col-6">
+                <div class="card text-white bg-dark">
+                    <div class="card-header">
+                        BoxStore
+                    </div>
+                    <div class="card-body">
+                        <h3>Bem vindo, {{ session['user'].nome }}.</h3>
+                    </div>
+                    <div class="card-footer text-muted">
+                        <small>Nível de usuário: {{ session['user'].grupo_name }}</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </div>
 {% endblock %}

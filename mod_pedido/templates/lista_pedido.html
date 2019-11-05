@@ -4,39 +4,32 @@
 
 {% block content %}
     <div class="container mt-5">
-        <a class="btn btn-danger" href="{{ url_for("pedido.formulario") }}"><i class="fas fa-plus-circle"></i> Novo
-            pedido</a>
+        <a class="btn btn-outline-success" href="{{ url_for("pedido.formulario") }}"><i class="fas fa-plus-circle"></i> NOVO PEDIDO</a>
         <div class="row mt-3">
             <div class="col col-12">
-                <table class="table table-bordered">
+                <table class="table table-dark table-striped table-hover">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th>#</th>
+                            <th>Cliente</th>
+                            <th>Endereço</th>
+                            <th>Localidade</th>
+                            <th>Obs</th>
+                            <th>Data/Hora</th>
+                            <th>Produtos</th>
+                            <th></th>
+                        </tr>
+                    </thead>
                     <tr>
-                        <th>#</th>
-                        <th>Telefone</th>
-                        <th>Cliente</th>
-                        <th>Endereço</th>
-                        <th>Número</th>
-                        <th>CEP</th>
-                        <th>Bairro</th>
-                        <th>Cidade</th>
-                        <th>Obs</th>
-                        <th>Data/Hora</th>
-                        <th>Produtos</th>
-                        <th></th>
-                    </tr>
-                    <tr>
-                        <td>1</td>
-                        <td>(49) 99999-9999</td>
-                        <td>Fulano</td>
-                        <td>Rua tal</td>
-                        <td>123</td>
-                        <td>88500-000</td>
-                        <td>Centro</td>
-                        <td>Lages</td>
-                        <td>Nenhuma</td>
-                        <td>08/09/2019 18:05:00</td>
-                        <td>Etc</td>
-                        <td><a href="{{ url_for("pedido.formulario") }}" class="btn btn-light"><i
-                                class="fa fa-edit"></i></a></td>
+                        <td class="align-middle">1</td>
+                        <td class="align-middle">Fulano <span class="d-block small text-secondary">(49) 99999-9999</span></td>
+                        <td class="align-middle">Rua tal, 123 <span class="d-block small text-secondary">88500-000</span></td>
+                        <td class="align-middle">Centro <span class="d-block small text-secondary">Lages, SC</span></td>
+                        <td class="align-middle"><span class="d-block small">Nenhuma</span></td>
+                        <td class="align-middle"><span class="d-block small">08/09/2019 18:05:00</span></td>
+                        <td class="align-middle"><span class="d-block small">Nenhuma</span></td>
+                        <td class="align-middle text-right"><a href="{{ url_for("pedido.formulario") }}" class="btn btn-outline-warning btn-sm"><i
+                                class="fa fa-edit"></i> EDITAR</a></td>
                     </tr>
                 </table>
             </div>
