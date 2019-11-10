@@ -99,6 +99,17 @@ def remocao(clienteid):
         return json_response(message='Não foi possível remover o cliente', data=[]), 400
 
 
+@bp_cliente.route('/cliente/busca/<int:clienteid>', methods=['GET'])
+@logado
+def busca(clienteid: int):
+    # Busca por cliente
+    cliente = Cliente()
+    cliente.select(clienteid)
+    if cliente.id_cliente == 0:
+        return json_response(message='Cliente não encontrado!', data=[]), 404
+    return json_response(message='Cliente encontrado!', data=[cliente]), 200
+
+
 def populate_from_request(cliente: Cliente):
     # Atribui valores do post ao model
     cliente.nome = request.form['nome']

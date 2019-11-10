@@ -2,7 +2,7 @@ from typing import List
 from mod_base.base import BaseModel
 
 
-class PedidoModel(BaseModel):
+class Pedido(BaseModel):
     def __init__(self, id_pedido=0, data_hora="", id_cliente=0, observacao=""):
         super().__init__()
         self.id_pedido = id_pedido
@@ -58,9 +58,9 @@ class PedidoModel(BaseModel):
     def all(self):
         c = self.db.con.cursor()
         c.execute("""SELECT id_pedido, data_hora, id_cliente, observacao FROM tb_pedidos ORDER BY id_pedido DESC""")
-        list_all: List[PedidoModel] = []
+        list_all: List[Pedido] = []
         for (row, key) in c:
-            list_all[key] = PedidoModel()
+            list_all[key] = Pedido()
             list_all[key].id_pedido = row[0]
             list_all[key].data_hora = row[1]
             list_all[key].id_cliente = row[2]
@@ -69,7 +69,7 @@ class PedidoModel(BaseModel):
         return list_all
 
 
-class PedidoProdutoModel(BaseModel):
+class PedidoProduto(BaseModel):
     def __init__(self, id_pedido=0, id_produto=0, quantidade=0, valor=0, observacao=""):
         super().__init__()
         self.id_pedido = id_pedido
@@ -120,9 +120,9 @@ class PedidoProdutoModel(BaseModel):
         c = self.db.con.cursor()
         c.execute("""SELECT id_pedido, id_produto, quantidade, valor, observacao 
                 FROM tb_pedido_produtos WHERE id_pedido = %s""", id_pedido)
-        list_all: List[PedidoProdutoModel] = []
+        list_all: List[PedidoProduto] = []
         for (row, key) in c:
-            list_all[key] = PedidoProdutoModel()
+            list_all[key] = PedidoProduto()
             list_all[key].id_pedido = row[0]
             list_all[key].id_produto = row[1]
             list_all[key].quantidade = row[2]
@@ -135,9 +135,9 @@ class PedidoProdutoModel(BaseModel):
         c = self.db.con.cursor()
         c.execute("""SELECT id_pedido, id_produto, quantidade, valor, observacao 
         FROM tb_pedido_produtos ORDER BY id_pedido DESC""")
-        list_all: List[PedidoProdutoModel] = []
+        list_all: List[PedidoProduto] = []
         for (row, key) in c:
-            list_all[key] = PedidoProdutoModel()
+            list_all[key] = PedidoProduto()
             list_all[key].id_pedido = row[0]
             list_all[key].id_produto = row[1]
             list_all[key].quantidade = row[2]

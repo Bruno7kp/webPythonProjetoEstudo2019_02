@@ -85,6 +85,18 @@ def remocao(produtoid):
         return json_response(message='Não foi possível remover o produto', data=[]), 400
 
 
+@bp_produto.route('/produto/busca/<int:produtoid>', methods=['GET'])
+@logado
+def busca(produtoid: int):
+    # Busca por produto
+    produto = Produto()
+    produto.select(produtoid)
+    if produto.id_produto == 0:
+        return json_response(message='Produto não encontrado!', data=[]), 404
+    return json_response(message='Produto encontrado!', data=[produto]), 200
+
+
+
 def populate_from_request(produto: Produto):
     # Atribui valores do post ao model
     produto.descricao = request.form['descricao']
