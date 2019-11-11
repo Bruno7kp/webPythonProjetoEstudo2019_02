@@ -92,6 +92,8 @@ def remocao(clienteid):
     cliente.select(clienteid)
     if cliente.id_cliente == 0:
         return json_response(message='Cliente não encontrado!', data=[], redirect=url_for('cliente.lista')), 404
+    if cliente.bought():
+        return json_response(message='Cliente com pedidos cadastrados não pode ser removido!', data=[]), 403
     rows = cliente.delete()
     if rows > 0:
         return json_response(message='Cliente removido!', data=[cliente], redirect=url_for('cliente.lista')), 200

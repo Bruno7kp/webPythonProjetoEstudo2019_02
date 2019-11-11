@@ -63,6 +63,12 @@ class Produto(BaseModel):
         c.close()
         return self
 
+    def bought(self):
+        c = self.db.con.cursor()
+        c.execute("SELECT id_produto FROM tb_pedido_produtos WHERE id_produto = %s", self.id_produto)
+        c.close()
+        return c.rowcount > 0
+
     def all(self):
         c = self.db.con.cursor()
         c.execute("""SELECT id_produto, descricao, valor, imagem FROM tb_produtos ORDER BY descricao""")

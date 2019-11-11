@@ -1,5 +1,5 @@
 # coding: utf-8
-from datetime import timedelta
+from datetime import timedelta, datetime
 
 from flask import Flask, redirect, url_for
 from mod_home.home_controller import bp_home
@@ -26,6 +26,24 @@ app.register_blueprint(bp_login)
 def money(text):
     text = text.__str__()
     return text.replace('.', ',')
+
+
+@app.template_filter()
+def cep(text):
+    text = text.__str__()
+    return text[:5] + '-' + text[5:]
+
+
+@app.template_filter()
+def telefone(text):
+    text = text.__str__()
+    return '(' + text[:2] + ') ' + text[2:7] + '-' + text[7:]
+
+
+@app.template_filter()
+def show_date(text):
+    text = text.__str__()
+    return datetime.strptime(text, "%Y-%m-%d %H:%M:%S").strftime("%d/%m/%Y %H:%M")
 
 
 @app.context_processor

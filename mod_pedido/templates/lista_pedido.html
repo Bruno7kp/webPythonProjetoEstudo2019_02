@@ -20,17 +20,23 @@
                             <th></th>
                         </tr>
                     </thead>
+                    {% for pedido in pedidos %}
                     <tr>
-                        <td class="align-middle">1</td>
-                        <td class="align-middle">Fulano <span class="d-block small text-secondary">(49) 99999-9999</span></td>
-                        <td class="align-middle">Rua tal, 123 <span class="d-block small text-secondary">88500-000</span></td>
-                        <td class="align-middle">Centro <span class="d-block small text-secondary">Lages, SC</span></td>
-                        <td class="align-middle"><span class="d-block small">Nenhuma</span></td>
-                        <td class="align-middle"><span class="d-block small">08/09/2019 18:05:00</span></td>
-                        <td class="align-middle"><span class="d-block small">Nenhuma</span></td>
-                        <td class="align-middle text-right"><a href="{{ url_for("pedido.cadastro_form") }}" class="btn btn-outline-warning btn-sm"><i
+                        <td class="align-middle">{{ pedido.id_pedido }}</td>
+                        <td class="align-middle">{{ pedido.cliente.nome }} <span class="d-block small text-secondary">{{ pedido.cliente.telefone | telefone }}</span></td>
+                        <td class="align-middle">{{ pedido.cliente.endereco }}, {{ pedido.cliente.numero }} <span class="d-block small text-secondary">{{ pedido.cliente.cep | cep }}</span></td>
+                        <td class="align-middle">{{ pedido.cliente.bairro }} <span class="d-block small text-secondary">{{ pedido.cliente.cidade }}, {{ pedido.cliente.estado }}</span></td>
+                        <td class="align-middle"><span class="d-block small">{{ pedido.observacao }}</span></td>
+                        <td class="align-middle"><span class="d-block small">{{ pedido.data_hora | show_date }}</span></td>
+                        <td class="align-middle">
+                            {% for item in pedido.produtos %}
+                            <span class="d-block small">{{ item.produto.descricao }}</span>
+                            {% endfor %}
+                        </td>
+                        <td class="align-middle text-right"><a href="{{ url_for("pedido.edicao_form", pedidoid=pedido.id_pedido) }}" class="btn btn-outline-warning btn-sm"><i
                                 class="fa fa-edit"></i> EDITAR</a></td>
                     </tr>
+                    {% endfor %}
                 </table>
             </div>
         </div>

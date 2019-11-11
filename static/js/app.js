@@ -71,21 +71,28 @@ const App = {
         if (select != null) {
             select.addEventListener("change", () => {
                 if (parseInt(select.value) > 0) {
-                    fetch("/cliente/busca/" + select.value).then(response => {
-                       if (response.status === 200) {
-                           response.json().then(jsonResponse => {
-                               let cliente = jsonResponse.data[0];
-                               App.fillClientData(cliente);
-                           });
-                       } else {
-                           App.cleanClientData();
-                       }
-                    });
+                    App.searchClientData(select.value);
                 } else {
                     App.cleanClientData();
                 }
             });
+            // Ao carregar página
+            if (parseInt(select.value) > 0) {
+                App.searchClientData(select.value);
+            }
         }
+    },
+    searchClientData: (id) => {
+        fetch("/cliente/busca/" +  id).then(response => {
+            if (response.status === 200) {
+                response.json().then(jsonResponse => {
+                    let cliente = jsonResponse.data[0];
+                    App.fillClientData(cliente);
+                });
+            } else {
+               App.cleanClientData();
+            }
+        });
     },
     fillClientData: (cliente) => {
         document.querySelector("#code").value = cliente.id_cliente;
@@ -107,87 +114,37 @@ const App = {
     },
     addProductListener: () => {
         let add = document.querySelector("#addproduto");
-        let template = `
-            <div class="product-row">
-                <hr>
-                <div class="row">
-                    <div class="col col-6">
-                        <div class="form-group">
-                            <label>Produto</label>
-                            <select name="id_produto[]" id="id_produto[]" class="form-control">
-                                <option value="0">Selecione o produto</option>
-                                {% for produto in produtos %}
-                                <option value="{{ produto.id_produto }}">{{ produto.descricao }}</option>
-                                {% endfor %}
-                            </select>
-                        </div>
-                    </div>
-                    <div class="col col-3">
-                        <div class="form-group">
-                            <label>Preço</label>
-                            <input pattern="\\d{1,8}(?:[,]\\d{1,2})?" name="preco[]" type="text" class="form-control" disabled="disabled">
-                        </div>
-                    </div>
-                    <div class="col col-3">
-                        <div class="form-group">
-                            <label>&nbsp;</label>
-                            <button type="button" class="btn btn-danger btn-sm d-block mt-1 btn-remove"><i class="fa fa-trash"></i> REMOVER PRODUTO</button>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col col-2">
-                        <div class="form-group">
-                            <label for="quantidade">Quantidade</label>
-                            <input name="quantidade[]" type="number" min="1" class="form-control">
-                        </div>
-                    </div>
-                    <div class="col col-3">
-                        <div class="form-group">
-                            <label for="total">Total R$</label>
-                            <input pattern="\\d{1,8}(?:[,]\\d{1,2})?" name="total[]" type="text" class="form-control">
-                        </div>
-                    </div>
-                    <div class="col col-4">
-                        <div class="form-group">
-                            <label>Observações</label>
-                            <textarea name="observacoes[]" rows="1" class="form-control"></textarea>
-                        </div>
-                    </div>
-                </div>
-            </div>`;
-        App.addProductRowListener(template);
+        let template = document.querySelector(".product-row");
         add.addEventListener("click", () => {
             let temp = document.createElement('div');
-            temp.innerHTML = template;
+            temp.innerHTML = template.outerHTML;
             let newRow = temp.firstChild;
+            newRow.querySelector("[name='produto[][id_produto]']").value = "";
+            newRow.querySelector("[name='produto[][quantidade]']").value = "";
+            newRow.querySelector("[name='produto[][total]']").value = "";
+            newRow.querySelector("[name='produto[][observacao]']").value = "";
+            App.cleanProductData(newRow);
             add.parentElement.parentElement.before(newRow);
             App.addProductRowListener(newRow);
         });
+        // Ao carregar página
+        let produtos = document.querySelectorAll(".product-row");
+        for (let i = 0; i < produtos.length; i++) {
+            App.addProductRowListener(produtos[i]);
+        }
     },
     addProductRowListener: (row) => {
         let select = row.querySelector("select");
-        let quantity = row.querySelector("[name='quantidade[]']");
+        let quantity = row.querySelector("[name='produto[][quantidade]']");
         let remove = row.querySelector(".btn-remove");
 
         select.addEventListener("change", () => {
             if (parseInt(select.value) > 0) {
-                    fetch("/produto/busca/" + select.value).then(response => {
-                       if (response.status === 200) {
-                           response.json().then(jsonResponse => {
-                               let produto = jsonResponse.data[0];
-                               App.fillProductData(row, produto);
-                               App.updateTotal(row);
-                           });
-                       } else {
-                           App.cleanProductData(row);
-                           App.updateTotal(row);
-                       }
-                    });
-                } else {
-                    App.cleanProductData(row);
-                    App.updateTotal(row);
-                }
+                App.searchProductData(row, select.value);
+            } else {
+                App.cleanProductData(row);
+                App.updateTotal(row);
+            }
         });
 
         quantity.addEventListener("change", () => {
@@ -200,12 +157,26 @@ const App = {
             }
         });
     },
+    searchProductData: (row, id) => {
+          fetch("/produto/busca/" + id).then(response => {
+           if (response.status === 200) {
+               response.json().then(jsonResponse => {
+                   let produto = jsonResponse.data[0];
+                   App.fillProductData(row, produto);
+                   App.updateTotal(row);
+               });
+           } else {
+               App.cleanProductData(row);
+               App.updateTotal(row);
+           }
+        });
+    },
     fillProductData: (row, product) => {
-        row.querySelector("[name='preco[]']").value = product.valor.toString().replace(".", ",");
+        row.querySelector("[name='produto[][preco]']").value = product.valor.toString().replace(".", ",");
     },
     updateTotal: (row) => {
-        let price = row.querySelector("[name='preco[]']").value;
-        let quantity = row.querySelector("[name='quantidade[]']").value;
+        let price = row.querySelector("[name='produto[][preco]']").value;
+        let quantity = row.querySelector("[name='produto[][quantidade]']").value;
         let priceValue = 0;
         let quantityValue = 0;
         if (price.length > 0) {
@@ -215,10 +186,10 @@ const App = {
             quantityValue = parseInt(quantity)
         }
         let total = (priceValue * quantityValue).toFixed(2);
-        row.querySelector("[name='total[]']").value = total.toString().replace(".", ",");
+        row.querySelector("[name='produto[][total]']").value = total.toString().replace(".", ",");
     },
     cleanProductData: (row) => {
-        row.querySelector("[name='preco[]']").value = ""
+        row.querySelector("[name='produto[][preco]']").value = ""
     },
     responseHandler: (response) => {
         if (response.status === 200 || response.status === 201) {
@@ -226,7 +197,7 @@ const App = {
         } else if (response.status === 401) {
             App.onNotAuth();
         } else if (response.status === 403) {
-            App.onForbidden();
+            response.json().then((jsonResponse) => App.onForbidden(jsonResponse));
         } else if (response.status === 500) {
             App.onServerError();
         } else {
@@ -239,8 +210,8 @@ const App = {
     onNotAuth: () => {
         alert('não logado');
     },
-    onForbidden: () => {
-        alert('não autorizado');
+    onForbidden: (response) => {
+        alert(response.message);
     },
     onServerError: () => {
         alert('erro no servidor, tente mais tarde');

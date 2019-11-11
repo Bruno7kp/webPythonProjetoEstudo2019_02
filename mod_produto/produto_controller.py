@@ -54,7 +54,7 @@ def cadastro():
 @logado
 def edicao(produtoid):
     # Edição via ajax
-    # Verifica se usuário existe
+    # Verifica se produto existe
     produto = Produto()
     produto.select(produtoid)
     if produto.id_produto == 0:
@@ -78,6 +78,8 @@ def remocao(produtoid):
     produto.select(produtoid)
     if produto.id_produto == 0:
         return json_response(message='Produto não encontrado!', data=[], redirect=url_for('produto.lista')), 404
+    if produto.bought():
+        return json_response(message='Produto presente em um pedido não pode ser removido!', data=[]), 403
     rows = produto.delete()
     if rows > 0:
         return json_response(message='Produto removido!', data=[produto], redirect=url_for('produto.lista')), 200
@@ -94,7 +96,6 @@ def busca(produtoid: int):
     if produto.id_produto == 0:
         return json_response(message='Produto não encontrado!', data=[]), 404
     return json_response(message='Produto encontrado!', data=[produto]), 200
-
 
 
 def populate_from_request(produto: Produto):

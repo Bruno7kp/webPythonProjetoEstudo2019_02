@@ -89,6 +89,12 @@ class Cliente(BaseModel):
         c.close()
         return self
 
+    def bought(self):
+        c = self.db.con.cursor()
+        c.execute("SELECT id_cliente FROM tb_pedidos WHERE id_cliente = %s", self.id_cliente)
+        c.close()
+        return c.rowcount > 0
+
     def all(self):
         c = self.db.con.cursor()
         c.execute("""SELECT id_cliente, nome, endereco, numero, observacao, cep, bairro, cidade, estado, telefone,
