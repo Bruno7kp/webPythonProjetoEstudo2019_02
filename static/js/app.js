@@ -132,6 +132,7 @@ const App = {
         for (let i = 0; i < produtos.length; i++) {
             App.addProductRowListener(produtos[i]);
         }
+        App.updateOverallTotal();
     },
     addProductRowListener: (row) => {
         let select = row.querySelector("select");
@@ -187,7 +188,17 @@ const App = {
         }
         let total = (priceValue * quantityValue).toFixed(2);
         row.querySelector("[name='produto[][total]']").value = total.toString().replace(".", ",");
+        App.updateOverallTotal();
     },
+    updateOverallTotal: () => {
+        let totalEl = document.querySelector("#total");
+        let totals = document.querySelectorAll("[name='produto[][total]']");
+        let sum = 0;
+        for (let i = 0; i < totals.length; i++) {
+            sum = sum + parseFloat(totals[i].value.replace(",", "."));
+        }
+        totalEl.innerHTML = "R$ " + sum.toFixed(2).toString().replace(".", ",");
+     },
     cleanProductData: (row) => {
         row.querySelector("[name='produto[][preco]']").value = ""
     },

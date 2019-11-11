@@ -101,7 +101,7 @@ def populate_from_request(pedido: Pedido):
 
     key = 0
     for total in dicti['produto[][total]']:
-        produtos[key].valor = total
+        produtos[key].valor = total.replace('.', '').replace(',', '.')
         key = key + 1
 
     key = 0

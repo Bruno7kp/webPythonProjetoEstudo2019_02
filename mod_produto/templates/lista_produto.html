@@ -22,7 +22,7 @@
                     <tr>
                         <td class="align-middle">{{ produto.id_produto }}</td>
                         <td class="align-middle">{{ produto.descricao }}</td>
-                        <td class="align-middle">{{ produto.valor | money }}</td>
+                        <td class="align-middle">R$ {{ produto.valor | money }}</td>
                         <td class="align-middle">
                             <a href="{{ produto.imagem.decode("utf-8")  }}" target="_blank">
                                 <img height="50" src="{{ produto.imagem.decode("utf-8")  }}" alt="{{ produto.descricao }}">

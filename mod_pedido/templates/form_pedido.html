@@ -129,7 +129,7 @@
                                     </div>
                                     <div class="col col-3">
                                         <div class="form-group">
-                                            <label for="total">Total R$</label>
+                                            <label>Total (R$) <small>Ex: 100,00</small></label>
                                             <input pattern="\d{1,8}(?:[,]\d{1,2})?" name="produto[][total]" type="text" value="{{ item.valor | money }}" class="form-control" required>
                                         </div>
                                     </div>
@@ -146,6 +146,8 @@
                                 <div class="col col-12">
                                     <hr>
                                     <button type="button" id="addproduto" class="btn btn-primary"><i class="fa fa-plus"></i> ADICIONAR PRODUTO</button>
+                                    <hr>
+                                    Total do pedido: <span id="total"></span>
                                 </div>
                             </div>
                         </div>
