@@ -5,6 +5,38 @@ const App = {
         App.addDeleteListener();
         App.addClientSelectorListener();
         App.addProductListener();
+        App.addMasks();
+    },
+    addMasks: () => {
+        let money = document.querySelectorAll('.mask-money');
+        for (let i = 0; i < money.length; i++) {
+            IMask(money[i], {
+                 mask: Number,
+                  scale: 2,
+                  signed: false,
+                  thousandsSeparator: '',
+                  padFractionalZeros: false,
+                  normalizeZeros: true,
+                  radix: ',',
+                  mapToRadix: ['.'],
+                  min: 0,
+                  max: 9999999999.99
+            });
+        }
+        let cep = document.querySelectorAll('.mask-cep');
+        for (let i = 0; i < cep.length; i++) {
+            IMask(cep[i], {
+                 mask: '00000-000',
+            });
+        }
+
+        let phone = document.querySelectorAll('.mask-phone');
+        for (let i = 0; i < phone.length; i++) {
+            IMask(phone[i], {
+                 mask: '(00) 00000-0000',
+            });
+        }
+
     },
     addSessionCounter: (minutesLimit, loggedSince, redirectUrl) => {
         let counterEl = document.querySelector('#time-counter');
@@ -115,18 +147,20 @@ const App = {
     addProductListener: () => {
         let add = document.querySelector("#addproduto");
         let template = document.querySelector(".product-row");
-        add.addEventListener("click", () => {
-            let temp = document.createElement('div');
-            temp.innerHTML = template.outerHTML;
-            let newRow = temp.firstChild;
-            newRow.querySelector("[name='produto[][id_produto]']").value = "";
-            newRow.querySelector("[name='produto[][quantidade]']").value = "";
-            newRow.querySelector("[name='produto[][total]']").value = "";
-            newRow.querySelector("[name='produto[][observacao]']").value = "";
-            App.cleanProductData(newRow);
-            add.parentElement.parentElement.before(newRow);
-            App.addProductRowListener(newRow);
-        });
+        if (add != null) {
+            add.addEventListener("click", () => {
+                let temp = document.createElement('div');
+                temp.innerHTML = template.outerHTML;
+                let newRow = temp.firstChild;
+                newRow.querySelector("[name='produto[][id_produto]']").value = "";
+                newRow.querySelector("[name='produto[][quantidade]']").value = "";
+                newRow.querySelector("[name='produto[][total]']").value = "";
+                newRow.querySelector("[name='produto[][observacao]']").value = "";
+                App.cleanProductData(newRow);
+                add.parentElement.parentElement.before(newRow);
+                App.addProductRowListener(newRow);
+            });
+        }
         // Ao carregar página
         let produtos = document.querySelectorAll(".product-row");
         for (let i = 0; i < produtos.length; i++) {
@@ -197,7 +231,9 @@ const App = {
         for (let i = 0; i < totals.length; i++) {
             sum = sum + parseFloat(totals[i].value.replace(",", "."));
         }
-        totalEl.innerHTML = "R$ " + sum.toFixed(2).toString().replace(".", ",");
+        if (totalEl != null) {
+            totalEl.innerHTML = "R$ " + sum.toFixed(2).toString().replace(".", ",");
+        }
      },
     cleanProductData: (row) => {
         row.querySelector("[name='produto[][preco]']").value = ""

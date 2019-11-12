@@ -4,6 +4,7 @@ from mod_login.login_controller import logado
 from mod_cliente.cliente_model import Cliente
 
 from mod_base.json_response import json_response
+import helper
 
 bp_cliente = Blueprint('cliente', __name__, url_prefix='/', template_folder='templates')
 
@@ -109,6 +110,8 @@ def busca(clienteid: int):
     cliente.select(clienteid)
     if cliente.id_cliente == 0:
         return json_response(message='Cliente não encontrado!', data=[]), 404
+    cliente.telefone = helper.telefone(cliente.telefone)
+    cliente.cep = helper.cep(cliente.cep)
     return json_response(message='Cliente encontrado!', data=[cliente]), 200
 
 

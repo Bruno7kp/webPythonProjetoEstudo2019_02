@@ -8,6 +8,7 @@ from mod_erro.erro_controller import bp_erro
 from mod_produto.produto_controller import bp_produto
 from mod_cliente.cliente_controller import bp_cliente
 from mod_login.login_controller import bp_login, SESSION_LIMIT
+import helper
 
 app = Flask(__name__)
 
@@ -24,26 +25,22 @@ app.register_blueprint(bp_login)
 
 @app.template_filter()
 def money(text):
-    text = text.__str__()
-    return text.replace('.', ',')
+    return helper.money(text)
 
 
 @app.template_filter()
 def cep(text):
-    text = text.__str__()
-    return text[:5] + '-' + text[5:]
+    return helper.cep(text)
 
 
 @app.template_filter()
 def telefone(text):
-    text = text.__str__()
-    return '(' + text[:2] + ') ' + text[2:7] + '-' + text[7:]
+    return helper.telefone(text)
 
 
 @app.template_filter()
 def show_date(text):
-    text = text.__str__()
-    return datetime.strptime(text, "%Y-%m-%d %H:%M:%S").strftime("%d/%m/%Y %H:%M")
+    return helper.show_date(text)
 
 
 @app.context_processor

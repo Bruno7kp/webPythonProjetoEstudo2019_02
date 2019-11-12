@@ -62,7 +62,7 @@
                                 <div class="col col-2">
                                     <div class="form-group">
                                         <label for="cep">CEP</label>
-                                        <input name="cep" id="cep" type="text" class="form-control" disabled="disabled">
+                                        <input name="cep" id="cep" type="text" class="form-control mask-cep" disabled="disabled">
                                     </div>
                                 </div>
                                 <div class="col col-3">
@@ -130,7 +130,7 @@
                                     <div class="col col-3">
                                         <div class="form-group">
                                             <label>Total (R$) <small>Ex: 100,00</small></label>
-                                            <input pattern="\d{1,8}(?:[,]\d{1,2})?" name="produto[][total]" type="text" value="{{ item.valor | money }}" class="form-control" required>
+                                            <input pattern="\d{1,8}(?:[,]\d{1,2})?" name="produto[][total]" type="text" value="{{ item.valor | money }}" class="form-control mask-money" required>
                                         </div>
                                     </div>
                                     <div class="col col-4">

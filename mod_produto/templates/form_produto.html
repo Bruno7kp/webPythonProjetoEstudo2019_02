@@ -34,7 +34,7 @@
                                 <div class="col col-3">
                                     <div class="form-group">
                                         <label for="valor">Valor (R$) <small>Ex: 10,00</small></label>
-                                        <input required id="valor" name="valor" pattern="\d{1,8}(?:[,]\d{1,2})?" type="text" placeholder="Ex: 10,50" class="form-control" value="{{ produto.valor | money }}">
+                                        <input required id="valor" name="valor" pattern="\d{1,8}(?:[,]\d{1,2})?" type="text" placeholder="Ex: 10,50" class="form-control mask-money" value="{{ produto.valor | money }}">
                                     </div>
                                 </div>
                             </div>
