@@ -79,6 +79,22 @@ def edicao(pedidoid):
         return json_response(message='Não foi possível editar o pedido', data=[]), 400
 
 
+@bp_pedido.route('/pedido/<int:pedidoid>', methods=['DELETE'])
+@logado
+def remocao(pedidoid):
+    # Remoção via ajax
+    # Verifica se usuário existe
+    pedido = Pedido()
+    pedido.select(pedidoid)
+    if pedido.id_pedido == 0:
+        return json_response(message='Pedido não encontrado!', data=[], redirect=url_for('pedido.lista')), 404
+    rows = pedido.delete()
+    if rows > 0:
+        return json_response(message='Pedido removido!', data=[], redirect=url_for('pedido.lista')), 200
+    else:
+        return json_response(message='Não foi possível remover o pedido', data=[]), 400
+
+
 @bp_pedido.route('/pedido/download/<int:pedidoid>', methods=['GET'])
 @logado
 def download(pedidoid):

@@ -156,6 +156,8 @@ const App = {
                 newRow.querySelector("[name='produto[][quantidade]']").value = "";
                 newRow.querySelector("[name='produto[][total]']").value = "";
                 newRow.querySelector("[name='produto[][observacao]']").value = "";
+                newRow.querySelector("img").src = "";
+                newRow.querySelector("img").style.display = "none";
                 App.cleanProductData(newRow);
                 add.parentElement.parentElement.before(newRow);
                 App.addProductRowListener(newRow);
@@ -208,6 +210,8 @@ const App = {
     },
     fillProductData: (row, product) => {
         row.querySelector("[name='produto[][preco]']").value = product.valor.toString().replace(".", ",");
+        row.querySelector("img").src = product.imagem;
+        row.querySelector("img").style.display = "inherit";
     },
     updateTotal: (row) => {
         let price = row.querySelector("[name='produto[][preco]']").value;

@@ -11,6 +11,9 @@
                     <div class="card bg-dark text-white mt-3">
                         <div class="card-header">
                             {{ 'ADICIONAR' if pedido.id_pedido == 0 else 'EDITAR' }} PEDIDO
+                            {% if pedido.id_pedido > 0 %}
+                            <button data-delete="{{ url_for('pedido.remocao', pedidoid=pedido.id_pedido) }}" class="btn btn-danger btn-sm float-right" type="button"><i class="fa fa-trash"></i> Excluir</button>
+                            {% endif %}
                         </div>
                         <div class="card-body">
                             <div class="row">
@@ -96,47 +99,54 @@
                             <div class="product-row">
                                 <hr>
                                 <div class="row">
-                                    <div class="col col-6">
-                                        <div class="form-group">
-                                            <label>Produto</label>
-                                            <select name="produto[][id_produto]" class="form-control" required>
-                                                <option value="">Selecione o produto</option>
-                                                {% for produto in produtos %}
-                                                <option value="{{ produto.id_produto }}"{{ ' selected' if produto.id_produto == item.id_produto }}>{{ produto.descricao }}</option>
-                                                {% endfor %}
-                                            </select>
-                                        </div>
+                                    <div class="col col-2 my-auto">
+                                        <img class="img-fluid" src="{{ item.produto.imagem.decode('utf-8') }}" alt="{{ item.produto.descricao }}">
                                     </div>
-                                    <div class="col col-3">
-                                        <div class="form-group">
-                                            <label>Preço</label>
-                                            <input pattern="\d{1,8}(?:[,]\d{1,2})?" name="produto[][preco]" type="text" value="{{ item.produto.valor | money }}" class="form-control" disabled="disabled">
+                                    <div class="col col-10">
+                                        <div class="row">
+                                            <div class="col col-6">
+                                                <div class="form-group">
+                                                    <label>Produto</label>
+                                                    <select name="produto[][id_produto]" class="form-control" required>
+                                                        <option value="">Selecione o produto</option>
+                                                        {% for produto in produtos %}
+                                                        <option value="{{ produto.id_produto }}"{{ ' selected' if produto.id_produto == item.id_produto }}>{{ produto.descricao }}</option>
+                                                        {% endfor %}
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col col-3">
+                                                <div class="form-group">
+                                                    <label>Preço</label>
+                                                    <input pattern="\d{1,8}(?:[,]\d{1,2})?" name="produto[][preco]" type="text" value="{{ item.produto.valor | money }}" class="form-control" disabled="disabled">
+                                                </div>
+                                            </div>
+                                            <div class="col col-3">
+                                                <div class="form-group">
+                                                    <label>&nbsp;</label>
+                                                    <button type="button" class="btn btn-danger btn-sm d-block mt-1 btn-remove"><i class="fa fa-trash"></i> REMOVER PRODUTO</button>
+                                                </div>
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="col col-3">
-                                        <div class="form-group">
-                                            <label>&nbsp;</label>
-                                            <button type="button" class="btn btn-danger btn-sm d-block mt-1 btn-remove"><i class="fa fa-trash"></i> REMOVER PRODUTO</button>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col col-2">
-                                        <div class="form-group">
-                                            <label for="quantidade">Quantidade</label>
-                                            <input name="produto[][quantidade]" type="number" min="1" value="{{ item.quantidade }}" class="form-control" required>
-                                        </div>
-                                    </div>
-                                    <div class="col col-3">
-                                        <div class="form-group">
-                                            <label>Total (R$) <small>Ex: 100,00</small></label>
-                                            <input pattern="\d{1,8}(?:[,]\d{1,2})?" name="produto[][total]" type="text" value="{{ item.valor | money }}" class="form-control mask-money" required>
-                                        </div>
-                                    </div>
-                                    <div class="col col-4">
-                                        <div class="form-group">
-                                            <label>Observações</label>
-                                            <textarea name="produto[][observacao]" rows="1" class="form-control">{{ item.observacao }}</textarea>
+                                        <div class="row">
+                                            <div class="col col-2">
+                                                <div class="form-group">
+                                                    <label for="quantidade">Quantidade</label>
+                                                    <input name="produto[][quantidade]" type="number" min="1" value="{{ item.quantidade }}" class="form-control" required>
+                                                </div>
+                                            </div>
+                                            <div class="col col-3">
+                                                <div class="form-group">
+                                                    <label>Total (R$) <small>Ex: 100,00</small></label>
+                                                    <input pattern="\d{1,8}(?:[,]\d{1,2})?" name="produto[][total]" type="text" value="{{ item.valor | money }}" class="form-control mask-money" required>
+                                                </div>
+                                            </div>
+                                            <div class="col col-4">
+                                                <div class="form-group">
+                                                    <label>Observações</label>
+                                                    <textarea name="produto[][observacao]" rows="1" class="form-control">{{ item.observacao }}</textarea>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>

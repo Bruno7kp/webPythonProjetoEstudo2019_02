@@ -63,8 +63,8 @@ class Pedido(BaseModel):
 
     def delete(self) -> int:
         c = self.db.con.cursor()
-        c.execute("DELETE FROM tb_pedidos WHERE id_pedido = %s", self.id_pedido)
         c.execute("DELETE FROM tb_pedido_produtos WHERE id_pedido = %s", self.id_pedido)
+        c.execute("DELETE FROM tb_pedidos WHERE id_pedido = %s", self.id_pedido)
         self.db.con.commit()
         rows = c.rowcount
         c.close()
