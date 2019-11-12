@@ -1,5 +1,5 @@
 # coding: utf-8
-from flask import Blueprint, render_template, redirect, url_for, request
+from flask import Blueprint, render_template, redirect, url_for, request, make_response
 
 from mod_base.json_response import json_response
 from mod_cliente.cliente_model import Cliente
@@ -77,6 +77,22 @@ def edicao(pedidoid):
         return json_response(message='Pedido atualizado!', data=[pedido]), 200
     else:
         return json_response(message='Não foi possível editar o pedido', data=[]), 400
+
+
+@bp_pedido.route('/pedido/download/<int:pedidoid>', methods=['GET'])
+@logado
+def download(pedidoid):
+    # Download do pdf
+    # Verifica se pedido existe
+    pedido = Pedido()
+    pedido.select(pedidoid)
+    if pedido.id_pedido == 0:
+        return json_response(message='Pedido não encontrado!', data=[]), 404
+    pdf = pedido.create_pdf()
+    response = make_response(pdf.output(dest='S').encode('latin-1'))
+    response.headers.set('Content-Disposition', 'attachment', filename='pedido' + pedido.id_pedido.__str__() + '.pdf')
+    response.headers.set('Content-Type', 'application/pdf')
+    return response
 
 
 def populate_from_request(pedido: Pedido):

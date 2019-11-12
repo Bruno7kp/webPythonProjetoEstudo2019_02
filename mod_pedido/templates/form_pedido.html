@@ -154,6 +154,9 @@
                         <div class="card-footer">
                             <div class="form-group mt-3">
                                 <button class="btn btn-success"><i class="fa fa-save"></i> SALVAR</button>
+                                {% if pedido.id_pedido > 0 %}
+                                    <a href="{{ url_for('pedido.download', pedidoid=pedido.id_pedido) }}" class="btn btn-primary"><i class="fa fa-download"></i> BAIXAR</a>
+                                {% endif %}
                             </div>
                         </div>
                     </div>

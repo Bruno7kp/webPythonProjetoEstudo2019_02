@@ -33,8 +33,14 @@
                             <span class="d-block small">{{ item.produto.descricao }}</span>
                             {% endfor %}
                         </td>
-                        <td class="align-middle text-right"><a href="{{ url_for("pedido.edicao_form", pedidoid=pedido.id_pedido) }}" class="btn btn-outline-warning btn-sm"><i
-                                class="fa fa-edit"></i> EDITAR</a></td>
+                        <td class="align-middle text-right">
+                            <a href="{{ url_for("pedido.download", pedidoid=pedido.id_pedido) }}" class="btn btn-outline-primary btn-sm">
+                                <i class="fa fa-download"></i>
+                            </a>
+                            <a href="{{ url_for("pedido.edicao_form", pedidoid=pedido.id_pedido) }}" class="btn btn-outline-warning btn-sm">
+                                <i class="fa fa-edit"></i> EDITAR
+                            </a>
+                        </td>
                     </tr>
                     {% endfor %}
                 </table>
