@@ -1,5 +1,6 @@
+from decimal import Decimal
 from typing import List
-from model import BaseModel
+from mod_base.base import BaseModel
 
 
 class Produto(BaseModel):
@@ -9,6 +10,20 @@ class Produto(BaseModel):
         self.descricao = descricao
         self.valor = valor
         self.imagem = imagem
+
+    def serialize(self):
+        imagem = self.imagem
+        if isinstance(imagem, bytes):
+            imagem = imagem.decode("utf-8")
+        valor = self.valor
+        if isinstance(valor, Decimal):
+            valor = str(valor)
+        return {
+            'id_produto': self.id_produto,
+            'descricao': self.descricao,
+            'valor': valor,
+            'imagem': imagem,
+        }
 
     def insert(self) -> int:
         c = self.db.con.cursor()
@@ -38,7 +53,8 @@ class Produto(BaseModel):
 
     def select(self, id_produto):
         c = self.db.con.cursor()
-        c.execute("""SELECT id_produto, descricao, valor, imagem FROM tb_produtos WHERE id_produto = %s""", id_produto)
+        c.execute("""SELECT id_produto, descricao, valor, imagem FROM tb_produtos WHERE id_produto = %s ORDER BY 
+        descricao""", id_produto)
         for row in c:
             self.id_produto = row[0]
             self.descricao = row[1]
@@ -47,15 +63,22 @@ class Produto(BaseModel):
         c.close()
         return self
 
+    def bought(self):
+        c = self.db.con.cursor()
+        c.execute("SELECT id_produto FROM tb_pedido_produtos WHERE id_produto = %s", self.id_produto)
+        c.close()
+        return c.rowcount > 0
+
     def all(self):
         c = self.db.con.cursor()
         c.execute("""SELECT id_produto, descricao, valor, imagem FROM tb_produtos ORDER BY descricao""")
         list_all: List[Produto] = []
-        for (row, key) in c:
-            list_all[key] = Produto()
-            list_all[key].id_produto = row[0]
-            list_all[key].descricao = row[1]
-            list_all[key].valor = row[2]
-            list_all[key].imagem = row[3]
+        for row in c:
+            produto = Produto()
+            produto.id_produto = row[0]
+            produto.descricao = row[1]
+            produto.valor = row[2]
+            produto.imagem = row[3]
+            list_all.append(produto)
         c.close()
         return list_all

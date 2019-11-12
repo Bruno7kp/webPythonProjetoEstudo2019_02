@@ -1,0 +1,33 @@
+{% extends "modelo.html" %}
+
+{% block title %}Clientes{% endblock %}
+
+{% block content %}
+    <div class="container mt-5">
+        <a class="btn btn-outline-success" href="{{ url_for("cliente.cadastro_form") }}"><i class="fas fa-plus-circle"></i> NOVO CLIENTE</a>
+        <div class="row mt-3">
+            <div class="col col-12">
+                <table class="table table-dark table-striped table-hover">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th>#</th>
+                            <th>Nome</th>
+                            <th>Login</th>
+                            <th>Cidade, Estado</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    {% for cliente in lista %}
+                    <tr>
+                        <td class="align-middle">{{ cliente.id_cliente }}</td>
+                        <td class="align-middle">{{ cliente.nome }} <span class="d-block small text-secondary">{{ cliente.get_group_name(cliente.grupo) }}</span></td>
+                        <td class="align-middle">{{ cliente.login }} <span class="d-block small text-secondary">{{ cliente.email }}</span></td>
+                        <td class="align-middle">{{ cliente.cidade + ', ' + cliente.estado }}</td>
+                        <td class="align-middle text-right"><a href="{{ url_for("cliente.edicao_form", clienteid=cliente.id_cliente) }}" class="btn btn-outline-warning btn-sm"><i class="fa fa-edit"></i> EDITAR</a></td>
+                    </tr>
+                    {% endfor %}
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock %}

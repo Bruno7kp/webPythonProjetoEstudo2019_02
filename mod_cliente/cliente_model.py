@@ -1,5 +1,6 @@
 from typing import List
-from model import BaseModel
+import bcrypt
+from mod_base.base import BaseModel
 
 
 class Cliente(BaseModel):
@@ -20,6 +21,24 @@ class Cliente(BaseModel):
         self.login = login
         self.senha = senha
         self.grupo = grupo
+
+    def serialize(self):
+        return {
+            'id_cliente': self.id_cliente,
+            'nome': self.nome,
+            'endereco': self.endereco,
+            'numero': self.numero,
+            'observacao': self.observacao,
+            'cep': self.cep,
+            'bairro': self.bairro,
+            'cidade': self.cidade,
+            'estado': self.estado,
+            'telefone': self.telefone,
+            'email': self.email,
+            'login': self.login,
+            'grupo': self.grupo,
+            'grupo_name': Cliente.get_group_name(self.grupo)
+        }
 
     def insert(self) -> int:
         c = self.db.con.cursor()
@@ -52,48 +71,81 @@ class Cliente(BaseModel):
         c.close()
         return rows
 
-    def select(self, id_produto):
+    def select(self, id_cliente):
         c = self.db.con.cursor()
         c.execute("""SELECT id_cliente, nome, endereco, numero, observacao, cep, bairro, cidade, estado, telefone,
-         email, login, senha, grupo FROM tb_clientes WHERE id_cliente = %s""", id_produto)
+         email, login, senha, grupo FROM tb_clientes WHERE id_cliente = %s ORDER BY nome""", id_cliente)
         for row in c:
-            self.id_cliente = row[0]
-            self.nome = row[1]
-            self.endereco = row[2]
-            self.numero = row[3]
-            self.observacao = row[4]
-            self.cep = row[5]
-            self.bairro = row[6]
-            self.cidade = row[7]
-            self.estado = row[8]
-            self.telefone = row[9]
-            self.email = row[10]
-            self.login = row[11]
-            self.senha = row[12]
-            self.grupo = row[13]
+            self.populate_from_db(row)
         c.close()
         return self
+
+    def select_by_login(self, login):
+        c = self.db.con.cursor()
+        c.execute("""SELECT id_cliente, nome, endereco, numero, observacao, cep, bairro, cidade, estado, telefone,
+         email, login, senha, grupo FROM tb_clientes WHERE login = %s""", login)
+        for row in c:
+            self.populate_from_db(row)
+        c.close()
+        return self
+
+    def bought(self):
+        c = self.db.con.cursor()
+        c.execute("SELECT id_cliente FROM tb_pedidos WHERE id_cliente = %s", self.id_cliente)
+        c.close()
+        return c.rowcount > 0
 
     def all(self):
         c = self.db.con.cursor()
         c.execute("""SELECT id_cliente, nome, endereco, numero, observacao, cep, bairro, cidade, estado, telefone,
          email, login, senha, grupo FROM tb_clientes ORDER BY nome""")
         list_all: List[Cliente] = []
-        for (row, key) in c:
-            list_all[key] = Cliente()
-            list_all[key].id_cliente = row[0]
-            list_all[key].nome = row[1]
-            list_all[key].endereco = row[2]
-            list_all[key].numero = row[3]
-            list_all[key].observacao = row[4]
-            list_all[key].cep = row[5]
-            list_all[key].bairro = row[6]
-            list_all[key].cidade = row[7]
-            list_all[key].estado = row[8]
-            list_all[key].telefone = row[9]
-            list_all[key].email = row[10]
-            list_all[key].login = row[11]
-            list_all[key].senha = row[12]
-            list_all[key].grupo = row[13]
+        for row in c:
+            cliente = Cliente()
+            cliente.populate_from_db(row)
+            list_all.append(cliente)
         c.close()
         return list_all
+
+    def populate_from_db(self, row):
+        self.id_cliente = row[0]
+        self.nome = row[1]
+        self.endereco = row[2]
+        self.numero = row[3]
+        self.observacao = row[4]
+        self.cep = row[5]
+        self.bairro = row[6]
+        self.cidade = row[7]
+        self.estado = row[8]
+        self.telefone = row[9]
+        self.email = row[10]
+        self.login = row[11]
+        self.senha = row[12]
+        self.grupo = row[13]
+
+    def login_exists(self, login, exceptid):
+        c = self.db.con.cursor()
+        c.execute("""SELECT id_cliente FROM tb_clientes WHERE id_cliente != %s AND login = %s""", (exceptid, login))
+        rows = c.rowcount
+        c.close()
+        return rows > 0
+
+    @staticmethod
+    def get_group_name(group: str):
+        if group == 'user':
+            return 'Cliente'
+        elif group == 'admin':
+            return 'Administrador'
+        return ''
+
+    @staticmethod
+    def valid_pass(password):
+        return len(password) >= 4
+
+    @staticmethod
+    def hash(password):
+        return bcrypt.hashpw(bytes(password, encoding='utf-8'), bcrypt.gensalt())
+
+    @staticmethod
+    def check_hash(password, hashed):
+        return bcrypt.checkpw(bytes(password, encoding='utf-8'), bytes(hashed, encoding='utf-8'))

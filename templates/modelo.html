@@ -5,85 +5,63 @@
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="apple-touch-icon" sizes="180x180" href="/static/img/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/static/img/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/static/img/favicon-16x16.png">
+    <link rel="manifest" href="/static/img/site.webmanifest">
+    <link rel="mask-icon" href="/static/img/safari-pinned-tab.svg" color="#5bbad5">
+    <meta name="msapplication-TileColor" content="#da532c">
+    <meta name="theme-color" content="#ffffff">
     {% block head %}
         <link rel="stylesheet" href="{{ url_for('static', filename='bootstrap-4.3.1/css/bootstrap.min.css') }}">
         <link rel="stylesheet" href="{{ url_for('static', filename='css/custom.css') }}">
         <link rel="stylesheet" href="{{ url_for('static', filename='fontawesome-free-5.10.2/css/all.min.css') }}">
-        <title>{% block title %}Home{% endblock %} - Projeto Final</title>
-        <style>
-        footer {
-            border-top: 2px solid black;
-        }
-        .time {
-            color: white;
-        }
-        </style>
+        <title>{% block title %}Home{% endblock %} - BoxStore</title>
     {% endblock %}
 </head>
-<body>
+<body class="{{ 'login-bg' if request.path == "/" else 'default-bg' }}">
 {% block menu %}
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <a class="navbar-brand" href="{{ url_for('home.home') }}">Projeto final</a>
+    <a class="navbar-brand" href="{{ url_for('home.home') }}">BoxStore</a>
     <ul class="navbar-nav mr-auto">
         <li class="nav-item">
-            <a class="nav-link" href="{{ url_for('home.home') }}"><i class="fas fa-home"></i> Home</a>
+            <a class="nav-link{{ ' active' if 'cliente' in request.path }}" href="{{ url_for('cliente.lista') }}"><i class="fas fa-users"></i> Clientes</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="{{ url_for('cliente.lista') }}"><i class="fas fa-users"></i> Clientes</a>
+            <a class="nav-link{{ ' active' if 'produto' in request.path }}" href="{{ url_for('produto.lista') }}"><i class="fas fa-pizza-slice"></i> Produtos</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="{{ url_for('produto.lista') }}"><i class="fas fa-pizza-slice"></i> Produtos</a>
+            <a class="nav-link{{ ' active' if 'pedido' in request.path }}" href="{{ url_for('pedido.lista') }}"><i class="fas fa-box-open"></i> Pedidos</a>
         </li>
-        <li class="nav-item">
-            <a class="nav-link" href="{{ url_for('pedido.lista') }}"><i class="fas fa-arrow-down"></i> Pedidos</a>
-        </li>
+    </ul>
+    <ul class="navbar-nav ml-auto">
         <li class="nav-item">
             <a class="nav-link" href="{{ url_for('login.sair') }}"><i class="fas fa-sign-out-alt"></i> Sair</a>
         </li>
     </ul>
-    <div class="time">Sessão <span id="time-counter">00:00:00</span></div>
+
 </nav>
 {% endblock %}
 {% block content %}{% endblock %}
 {% block footer %}
-    <div class="container-fluid mt-5">
+    <div class="container-fluid mt-5 px-0">
         <footer>
-            &copy; Copyright 2019 by <a href="{{ url_for('home.home') }}">Projeto final</a>.
+            &copy; Copyright 2019 by <a href="{{ url_for('home.home') }}">BoxStore</a>
+            <span class="d-inline-block float-right">Sessão <span id="time-counter">00:00:00</span></span>
         </footer>
     </div>
 {% endblock %}
 {% block scripts %}
-<script src="{{ url_for('static', filename='bootstrap-4.3.1/js/bootstrap.min.js') }}"></script>
-<script>
+    <script src="{{ url_for('static', filename='bootstrap-4.3.1/js/bootstrap.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/imask.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+    <script>
     let loggedSince = 0;
-    let minutesLimit = {{ session_limit }};
     {% if 'time' in session %}
     loggedSince = {{ session['time'] }};
     {% endif %}
-    let counterEl = document.querySelector('#time-counter');
-    if (loggedSince > 0 && counterEl != null) {
-        setInterval(() => {
-            let now = new Date().getTime() / 1000;
-            let diffSeconds = Math.floor(now - loggedSince);
-            let diffMinutes = Math.floor(diffSeconds / 60);
-            diffSeconds = diffSeconds % 60;
-            let diffHours = Math.floor(diffMinutes / 60);
-            diffMinutes = diffMinutes % 60;
-            let diffDays = Math.floor(diffHours / 24);
-            diffHours = diffHours % 24;
-            let clock = "";
-            clock += (diffHours > 9) ? diffHours : "0" + diffHours;
-            clock += ":";
-            clock += (diffMinutes > 9) ? diffMinutes : "0" + diffMinutes;
-            clock += ":";
-            clock += (diffSeconds > 9) ? diffSeconds : "0" + diffSeconds;
-            counterEl.innerText = clock;
-            if (diffMinutes >= minutesLimit) {
-                window.location = "{{ url_for('login.entrar', erro=2) }}";
-            }
-        }, 1000);
-    }
-</script>
+    App.startUp({{ session_limit }}, loggedSince, "{{ url_for('login.entrar', erro=2) }}");
+    </script>
 {% endblock %}
 </body>
 </html>

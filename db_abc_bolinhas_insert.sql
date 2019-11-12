@@ -1,0 +1,1 @@
+INSERT INTO tb_clientes (id_cliente, nome, endereco, numero, observacao, cep, bairro, cidade, estado, telefone, email, login, senha, grupo) VALUES (7, 'Administrador', 'Nisi neque pariatur', 10, 'Rerum doloribus prae', '88500001', 'Centro', 'Lages', 'SC', '49999999999', 'admin@final.com.br', 'admin', '$2b$12$o/JWLpHrHfeWHOlHbKtnruYl/KJ1nwjL/b4KAwd09JhN3phARY7IC', 'admin');

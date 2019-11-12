@@ -8,9 +8,11 @@
     <div class="container mt-5">
         <div class="row">
             <div class="col col-6 offset-3">
-                <div class="card">
+                <div class="card card-login bg-dark text-white">
                     <div class="card-body text-center">
-                        <h3>Bem-vindo</h3>
+                        <img class="card-logo" src="{{ url_for('static', filename='img/apple-touch-icon.png') }}" alt="Logo">
+                        <h4>BoxStore</h4>
+                        <p>Informe login e senha nos campos abaixo para entrar no sistema.</p>
                         <form action="{{ url_for('login.login') }}" method="post">
                             <div class="row">
                                 <div class="col col-12">
@@ -29,7 +31,7 @@
                             <div class="row">
                                 <div class="col col-12">
                                     <div class="form-group">
-                                        <button class="btn btn-block btn-success">Login</button>
+                                        <button class="btn btn-block btn-primary">Entrar</button>
                                     </div>
                                 </div>
                             </div>
@@ -50,3 +52,6 @@
     </div>
 {% endblock %}
 {% block footer %}{% endblock %}
+{% block scripts %}
+<script src="{{ url_for('static', filename='bootstrap-4.3.1/js/bootstrap.min.js') }}"></script>
+{% endblock %}

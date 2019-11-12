@@ -1,3 +1,5 @@
+import json
+
 import pymysql
 import abc
 
@@ -15,6 +17,10 @@ class DataBase:
 class BaseModel:
     def __init__(self):
         self.db = DataBase()
+
+    @abc.abstractmethod
+    def serialize(self):
+        return {}
 
     @abc.abstractmethod
     def insert(self) -> int:

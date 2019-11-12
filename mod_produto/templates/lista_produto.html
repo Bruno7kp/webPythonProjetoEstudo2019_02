@@ -1,0 +1,38 @@
+{% extends "modelo.html" %}
+
+{% block title %}Produtos{% endblock %}
+
+{% block content %}
+    <div class="container mt-5">
+        <a class="btn btn-outline-success" href="{{ url_for("produto.cadastro_form") }}"><i class="fas fa-plus-circle"></i> NOVO PRODUTO</a>
+        <div class="row mt-3">
+            <div class="col col-12">
+                <table class="table table-dark table-striped table-hover">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th>#</th>
+                            <th>Descrição</th>
+                            <th>Preço</th>
+                            <th>Imagem</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+
+                    {% for produto in lista %}
+                    <tr>
+                        <td class="align-middle">{{ produto.id_produto }}</td>
+                        <td class="align-middle">{{ produto.descricao }}</td>
+                        <td class="align-middle">R$ {{ produto.valor | money }}</td>
+                        <td class="align-middle">
+                            <a href="{{ produto.imagem.decode("utf-8")  }}" target="_blank">
+                                <img height="50" src="{{ produto.imagem.decode("utf-8")  }}" alt="{{ produto.descricao }}">
+                            </a>
+                        </td>
+                        <td class="align-middle text-right"><a href="{{ url_for("produto.edicao_form", produtoid=produto.id_produto) }}" class="btn btn-outline-warning btn-sm"><i class="fa fa-edit"></i> EDITAR</a></td>
+                    </tr>
+                    {% endfor %}
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock %}
