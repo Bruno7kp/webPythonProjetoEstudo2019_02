@@ -103,6 +103,25 @@ class Pedido(BaseModel):
         c.close()
         return list_all
 
+    def all_by_cliente_id(self, cliente_id: int):
+        c = self.db.con.cursor()
+        c.execute("""SELECT id_pedido, data_hora, id_cliente, observacao FROM tb_pedidos WHERE id_cliente = %s 
+                    ORDER BY id_pedido DESC""", cliente_id)
+        list_all: List[Pedido] = []
+        for row in c:
+            produto = PedidoProduto()
+            cliente = Cliente()
+            pedido = Pedido()
+            pedido.id_pedido = row[0]
+            pedido.data_hora = row[1]
+            pedido.id_cliente = row[2]
+            pedido.observacao = row[3]
+            pedido.produtos = produto.select(pedido.id_pedido)
+            pedido.cliente = cliente.select(pedido.id_cliente)
+            list_all.append(pedido)
+        c.close()
+        return list_all
+
     def create_pdf(self):
         rows = ""
         c = 1

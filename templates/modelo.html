@@ -24,12 +24,18 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <a class="navbar-brand" href="{{ url_for('home.home') }}">BoxStore</a>
     <ul class="navbar-nav mr-auto">
+        {% if session['user'].grupo == 'admin' %}
         <li class="nav-item">
             <a class="nav-link{{ ' active' if 'cliente' in request.path }}" href="{{ url_for('cliente.lista') }}"><i class="fas fa-users"></i> Clientes</a>
         </li>
         <li class="nav-item">
             <a class="nav-link{{ ' active' if 'produto' in request.path }}" href="{{ url_for('produto.lista') }}"><i class="fas fa-pizza-slice"></i> Produtos</a>
         </li>
+        {% else %}
+        <li class="nav-item">
+            <a class="nav-link{{ ' active' if 'cliente' in request.path }}" href="{{ url_for('cliente.edicao_form', clienteid=session['user'].id_cliente) }}"><i class="fas fa-user-edit"></i> Perfil</a>
+        </li>
+        {% endif %}
         <li class="nav-item">
             <a class="nav-link{{ ' active' if 'pedido' in request.path }}" href="{{ url_for('pedido.lista') }}"><i class="fas fa-box-open"></i> Pedidos</a>
         </li>

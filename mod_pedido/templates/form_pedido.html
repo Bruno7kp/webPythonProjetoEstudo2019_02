@@ -28,12 +28,17 @@
                                 <div class="col col-3">
                                     <div class="form-group">
                                         <label for="cliente">Cliente</label>
+                                        {% if session['user'].grupo == 'admin' %}
                                         <select name="id_cliente" id="cliente" autocomplete="off" class="form-control" required>
                                             <option value="">Selecione o cliente</option>
                                             {% for cliente in clientes %}
                                                 <option value="{{ cliente.id_cliente }}"{{ ' selected' if cliente.id_cliente == pedido.id_cliente }}>{{ cliente.nome }}</option>
                                             {% endfor %}
                                         </select>
+                                        {% else %}
+                                            <input type="hidden" name="id_cliente" id="cliente" value="{{ session['user'].id_cliente }}">
+                                            <input type="text" class="form-control" disabled value="{{ session['user'].nome }}">
+                                        {% endif %}
                                     </div>
                                 </div>
                                 <div class="col col-3">
@@ -100,7 +105,7 @@
                                 <hr>
                                 <div class="row">
                                     <div class="col col-2 my-auto">
-                                        <img class="img-fluid" src="{{ item.produto.imagem.decode('utf-8') }}" alt="{{ item.produto.descricao }}">
+                                        <img class="img-fluid" src="{{ item.produto.imagem.decode('utf-8') if item.produto.id_produto > 0 else '' }}" alt="{{ item.produto.descricao }}">
                                     </div>
                                     <div class="col col-10">
                                         <div class="row">

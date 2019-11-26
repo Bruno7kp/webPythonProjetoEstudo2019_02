@@ -1,5 +1,5 @@
 # coding: utf-8
-from flask import Blueprint, render_template, redirect, url_for, request, make_response
+from flask import Blueprint, render_template, redirect, url_for, request, make_response, session
 
 from mod_base.json_response import json_response
 from mod_cliente.cliente_model import Cliente
@@ -14,7 +14,10 @@ bp_pedido = Blueprint('pedido', __name__, url_prefix='/', template_folder='templ
 @logado
 def lista():
     pedido = Pedido()
-    pedidos = pedido.all()
+    if session['user']['grupo'] == 'admin':
+        pedidos = pedido.all()
+    else:
+        pedidos = pedido.all_by_cliente_id(session['user']['id_cliente'])
     return render_template('lista_pedido.html', pedidos=pedidos)
 
 
@@ -25,7 +28,14 @@ def cadastro_form():
     pedido = Pedido()
     pedido.produtos.append(PedidoProduto())
     cliente = Cliente()
-    clientes = cliente.all()
+    if session['user']['grupo'] == 'admin':
+        clientes = cliente.all()
+    else:
+        clientes = []
+        cliente.select(session['user']['id_cliente'])
+        clientes.append(cliente)
+        pedido.id_cliente = cliente.id_cliente
+        pedido.cliente = cliente
     produto = Produto()
     produtos = produto.all()
     return render_template('form_pedido.html', pedido=pedido, clientes=clientes, produtos=produtos)
@@ -39,8 +49,17 @@ def edicao_form(pedidoid: int):
     pedido.select(pedidoid)
     if pedido.id_pedido == 0:
         return redirect(url_for('pedido.lista'))
+    if session['user']['id_cliente'] != pedido.id_cliente and session['user']['grupo'] != 'admin':
+        return render_template('403.html'), 403
     cliente = Cliente()
-    clientes = cliente.all()
+    if session['user']['grupo'] == 'admin':
+        clientes = cliente.all()
+    else:
+        clientes = []
+        cliente.select(session['user']['id_cliente'])
+        clientes.append(cliente)
+        pedido.id_cliente = cliente.id_cliente
+        pedido.cliente = cliente
     produto = Produto()
     produtos = produto.all()
     return render_template('form_pedido.html', pedido=pedido, clientes=clientes, produtos=produtos)
@@ -52,6 +71,8 @@ def cadastro():
     # Cadastro via ajax
     pedido = Pedido()
     populate_from_request(pedido)
+    if session['user']['grupo'] != 'admin':
+        pedido.id_cliente = session['user']['id_cliente']
 
     identifier = pedido.insert()
     if identifier > 0:
@@ -70,7 +91,13 @@ def edicao(pedidoid):
     if pedido.id_pedido == 0:
         return json_response(message='Pedido não encontrado!', data=[], redirect=url_for('pedido.lista')), 404
 
+    if session['user']['id_cliente'] != pedido.id_cliente and session['user']['grupo'] != 'admin':
+        return json_response(message='Você não tem permissão para realizar esta ação', data=[]), 403
+
     populate_from_request(pedido)
+
+    if session['user']['grupo'] != 'admin':
+        pedido.id_cliente = session['user']['id_cliente']
 
     rows = pedido.update()
     if rows > 0:
@@ -88,6 +115,8 @@ def remocao(pedidoid):
     pedido.select(pedidoid)
     if pedido.id_pedido == 0:
         return json_response(message='Pedido não encontrado!', data=[], redirect=url_for('pedido.lista')), 404
+    if session['user']['id_cliente'] != pedido.id_cliente and session['user']['grupo'] != 'admin':
+        return json_response(message='Você não tem permissão para realizar esta ação', data=[]), 403
     rows = pedido.delete()
     if rows > 0:
         return json_response(message='Pedido removido!', data=[], redirect=url_for('pedido.lista')), 200
@@ -104,6 +133,9 @@ def download(pedidoid):
     pedido.select(pedidoid)
     if pedido.id_pedido == 0:
         return json_response(message='Pedido não encontrado!', data=[]), 404
+
+    if session['user']['id_cliente'] != pedido.id_cliente and session['user']['grupo'] != 'admin':
+        return json_response(message='Você não tem permissão para realizar esta ação', data=[]), 403
     pdf = pedido.create_pdf()
     response = make_response(pdf.output(dest='S').encode('latin-1'))
     response.headers.set('Content-Disposition', 'attachment', filename='pedido' + pedido.id_pedido.__str__() + '.pdf')
